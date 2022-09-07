@@ -37,8 +37,7 @@ export interface IOffer {
   title: string;
   description: string;
   dateOfCreation: Date;
-  // TODO: заменить на полноценный интерфейс города
-  city: CityName;
+  city: ICity;
   previewImage: string;
   photos: [string, string, string, string, string, string];
   isPremium: boolean;

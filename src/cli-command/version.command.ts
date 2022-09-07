@@ -1,0 +1,21 @@
+import { ICLICommand } from '../types/command.types';
+import { readFile } from 'fs/promises';
+
+export default class VersionCommand implements ICLICommand {
+  readonly name = '--version';
+
+  private async readVersion(): Promise<string> {
+    const fileContentJSON = await readFile('./package.json', 'utf-8')
+      .then((res) => JSON.parse(res))
+      .catch((err) => {
+        throw err;
+      }) as { version?: string };
+
+    return fileContentJSON.version || 'version is not specified';
+  }
+
+  async execute(): Promise<void> {
+    const version = await this.readVersion();
+    console.log(version);
+  }
+}

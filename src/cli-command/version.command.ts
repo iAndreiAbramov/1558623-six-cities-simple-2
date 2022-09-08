@@ -7,8 +7,8 @@ export default class VersionCommand implements ICLICommand {
   private async readVersion(): Promise<string> {
     const fileContentJSON = await readFile('./package.json', 'utf-8')
       .then((res) => JSON.parse(res))
-      .catch((err) => {
-        throw err;
+      .catch(() => {
+        throw new Error('failed to read ./package.json');
       }) as { version?: string };
 
     return fileContentJSON.version || 'version is not specified';

@@ -1,7 +1,7 @@
 import { ICLICommand } from '../types/command.types';
 import { readFile } from 'fs/promises';
 
-export default class VersionCommand implements ICLICommand {
+class VersionCommand implements ICLICommand {
   readonly name = '--version';
 
   private async readVersion(): Promise<string> {
@@ -19,3 +19,5 @@ export default class VersionCommand implements ICLICommand {
     console.log(version);
   }
 }
+
+export const versionCommand = new VersionCommand();

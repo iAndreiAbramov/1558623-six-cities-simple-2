@@ -1,6 +1,6 @@
 import { ICLICommand } from '../types/command.types';
 
-export default class HelpCommand implements ICLICommand {
+class HelpCommand implements ICLICommand {
   readonly name = '--help';
 
   execute(): void {
@@ -16,3 +16,5 @@ export default class HelpCommand implements ICLICommand {
         `);
   }
 }
+
+export const helpCommand = new HelpCommand();

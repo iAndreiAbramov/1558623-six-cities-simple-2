@@ -11,7 +11,7 @@ class VersionCommand implements ICLICommand {
         throw new Error('failed to read ./package.json');
       }) as { version?: string };
 
-    return fileContentJSON.version || 'version is not specified';
+    return fileContentJSON?.version || 'version is not specified';
   }
 
   async execute(): Promise<void> {

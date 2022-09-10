@@ -1,14 +1,28 @@
 import { ICLICommand } from '../types/command.types';
 
-type ParsedCommand = {
+type TParsedCommand = {
   [key: string]: string[];
 }
 
 export default class CliApplication {
-  private commands: { [propertyName: string]: ICLICommand } = {};
+  private commands: { [commandName: string]: ICLICommand } = {};
   private defaultCommand = '--help';
 
-  private parseCommand(cliArguments: string[]): ParsedCommand {
+  public registerCommands(commandList: ICLICommand[]): void {
+    commandList.forEach((command) => {
+      this.commands[command.name] = command;
+    });
+  }
+
+  public processCommand(argv: string[]): void {
+    const parsedCommand = this.parseCommand(argv);
+    const [commandName] = Object.keys(parsedCommand);
+    const command = this.getCommand(commandName);
+    const commandArguments = parsedCommand[commandName] ?? [];
+    command.execute(...commandArguments);
+  }
+
+  private parseCommand(cliArguments: string[]): TParsedCommand {
     let command = '';
     let parsedArguments: string[] = [];
 
@@ -21,25 +35,10 @@ export default class CliApplication {
       }
     });
 
-    return command ? { command: parsedArguments } : {};
-  }
-
-  public registerCommands(commandList: ICLICommand[]): void {
-    commandList.forEach((command) => {
-      this.commands[command.name] = command;
-    });
+    return command ? { [command]: parsedArguments } : {};
   }
 
   private getCommand(commandName: string): ICLICommand {
     return this.commands[commandName] ?? this.commands[this.defaultCommand];
-  }
-
-  public processCommand(argv: string[]): void {
-    console.log(argv);
-    const parsedCommand = this.parseCommand(argv);
-    const [commandName] = Object.keys(parsedCommand);
-    const command = this.getCommand(commandName);
-    const commandArguments = parsedCommand[commandName] ?? [];
-    command.execute(...commandArguments);
   }
 }

@@ -38,10 +38,10 @@ export type ICity = {
 export interface IOffer {
   title: string;
   description: string;
-  dateOfCreation: Date;
+  dateOfCreation: string;
   city: ICity;
   previewImage: string;
-  photos: [string, string, string, string, string, string];
+  photos: string[];
   isPremium: boolean;
   rating: number;
   type: ApartmentType;

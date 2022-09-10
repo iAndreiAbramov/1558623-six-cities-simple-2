@@ -2,7 +2,7 @@ import { ICLICommand } from '../types/command.types';
 
 type TParsedCommand = {
   [key: string]: string[];
-}
+};
 
 export default class CliApplication {
   private commands: { [commandName: string]: ICLICommand } = {};

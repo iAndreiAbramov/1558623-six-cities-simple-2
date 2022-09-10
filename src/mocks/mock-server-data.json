@@ -1,0 +1,123 @@
+{
+  "api": {
+    "titles": [
+      "Amazing and Extremely Central Flat",
+      "Loft Studio in the Central Area",
+      "Canal View Prinsengracht",
+      "The Pondhouse - A Magical Place",
+      "Perfectly located Castro"
+    ],
+    "descriptions": [
+      "Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country. In our beautiful screened Pondhouse, you can gaze at the stars and listen to the sounds of nature from your cozy warm bed.",
+      "Discover daily local life in city center, friendly neighborhood, clandestine casino, karaoke, old-style artisans, art gallery and artist studio downstairs.",
+      "This is a place for dreamers to reset, reflect, and create. Designed with a 'slow' pace in mind, our hope is that you enjoy every part of your stay; from making local coffee by drip in the morning, choosing the perfect record to put on as the sun sets.",
+      "A new spacious villa, one floor. All commodities, jacuzzi and beautiful scenery. Ideal for families or friends.",
+      "This is a place for dreamers to reset, reflect, and create. Designed with a 'slow' pace in mind, our hope is that you enjoy every part of your stay; from making local coffee by drip in the morning, choosing the perfect record to put on as the sun sets"
+    ],
+    "cities": [
+      {
+        "Paris": {
+          "latitude": "48.85661",
+          "longitude": "2.351499"
+        },
+        "Cologne": {
+          "latitude": "50.938361",
+          "longitude": "6.959974"
+        },
+        "Brussels": {
+          "latitude": "50.846557",
+          "longitude": "4.351697"
+        },
+        "Amsterdam": {
+          "latitude": "52.370216",
+          "longitude": "4.895168"
+        },
+        "Hamburg": {
+          "latitude": "53.550341",
+          "longitude": "10.000654"
+        },
+        "Dusseldorf": {
+          "latitude": "51.225402",
+          "longitude": "6.776314"
+        }
+      }
+    ],
+    "previewImages": [
+      "preview/image-1",
+      "preview/image-2",
+      "preview/image-3",
+      "preview/image-4",
+      "preview/image-5",
+      "preview/image-6"
+    ],
+    "photos": [
+      "photo-1",
+      "photo-2",
+      "photo-3",
+      "photo-4",
+      "photo-5",
+      "photo-6"
+    ],
+    "isPremium": [
+      true,
+      false
+    ],
+    "apartmentTypes": [
+      "apartment",
+      "house",
+      "room",
+      "hotel"
+    ],
+    "goods": [
+      "Breakfast",
+      "Air conditioning",
+      "Laptop friendly workspace",
+      "Baby seat",
+      "Washer",
+      "Towels",
+      "Fridge"
+    ],
+    "hosts": [
+      {
+        "name": "host 1",
+        "email": "fake1@fake.com",
+        "avatar": "avatar1",
+        "password": "aszxldf42!",
+        "isPro": true
+      },
+      {
+        "name": "host 2",
+        "email": "fake2@fake.com",
+        "avatar": "avatar2",
+        "password": "aswetwdf42!",
+        "isPro": false
+      }
+    ],
+    "coordinates": [
+      {
+        "latitude": "48.85661",
+        "longitude": "2.351499"
+      },
+      {
+        "latitude": "50.938361",
+        "longitude": "6.959974"
+      },
+      {
+        "latitude": "50.846557",
+        "longitude": "4.351697"
+      },
+      {
+        "latitude": "52.370216",
+        "longitude": "4.895168"
+      },
+      {
+        "latitude": "53.550341",
+        "longitude": "10.000654"
+      },
+      {
+        "latitude": "51.225402",
+        "longitude": "6.776314"
+      }
+    ]
+  }
+}

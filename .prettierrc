@@ -1,0 +1,27 @@
+{
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "endOfLine": "auto",
+  "jsxBracketSameLine": false,
+  "jsxSingleQuote": false,
+  "parser": "typescript",
+  "printWidth": 80,
+  "proseWrap": "preserve",
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "useTabs": false,
+  "overrides": [
+    {
+      "files": [
+        "**/*.json",
+        ".prettierrc",
+        ".eslintrc"
+      ],
+      "options": {
+        "parser": "json"
+      }
+    }
+  ]
+}

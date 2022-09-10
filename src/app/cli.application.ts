@@ -35,6 +35,7 @@ export default class CliApplication {
   }
 
   public processCommand(argv: string[]): void {
+    console.log(argv);
     const parsedCommand = this.parseCommand(argv);
     const [commandName] = Object.keys(parsedCommand);
     const command = this.getCommand(commandName);

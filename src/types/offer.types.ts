@@ -60,7 +60,7 @@ export interface IOfferParsed {
   dateOfCreation: string;
   city: string;
   previewImage: string;
-  photos: [string, string, string, string, string, string];
+  photos: string[];
   isPremium: string;
   rating: string;
   type: string;
@@ -69,5 +69,5 @@ export interface IOfferParsed {
   price: string;
   goods: string[];
   host: string;
-  coordinates: [string, string];
+  coordinates: string[];
 }

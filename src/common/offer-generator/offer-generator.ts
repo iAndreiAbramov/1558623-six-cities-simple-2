@@ -6,8 +6,8 @@ import {
   getRandomBoolean,
   getRandomDate,
   getRandomFloat,
-  getRandomInteger,
-} from '../../utils/common.utils';
+  getRandomInteger, transformObjectValuesToMockString,
+} from '../../utils/common.utils.js';
 import {
   DECIMALS_IN_PRICE,
   DECIMALS_IN_RATING,
@@ -21,7 +21,7 @@ import {
   MIN_RATING,
   MIN_ROOMS_NUMBER,
   PHOTOS_NUMBER_IN_OFFER,
-} from '../../constants/common.constants';
+} from '../../constants/common.constants.js';
 
 export class OfferGenerator implements IOfferGenerator {
   constructor(private mockData: IMockData) {}
@@ -64,10 +64,8 @@ export class OfferGenerator implements IOfferGenerator {
       goods,
       getRandomInteger(MIN_GOODS_NUMBER, goods.length - 1),
     ).join(';');
-    const host = getRandomArrayItem(users);
-    const randomCoordinates = Object.values(
-      getRandomArrayItem(coordinates),
-    ).join(';');
+    const host = transformObjectValuesToMockString(getRandomArrayItem(users));
+    const randomCoordinates = transformObjectValuesToMockString(getRandomArrayItem(coordinates));
 
     return [
       title,

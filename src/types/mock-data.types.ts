@@ -7,6 +7,6 @@ export interface IMockData {
   isPremium: string;
   apartmentTypes: string[];
   goods: string[];
-  users: string[];
-  coordinates: string[];
+  users: Record<string | number | symbol, string>[];
+  coordinates: Record<string | number | symbol, string>[];
 }

@@ -1,4 +1,7 @@
-import { FIRST_WEEK_DAY, LAST_WEEK_DAY } from '../constants/common.constants';
+import {
+  FIRST_WEEK_DAY,
+  LAST_WEEK_DAY,
+} from '../constants/common.constants.js';
 import dayjs from 'dayjs';
 
 export const getRandomInteger = (min: number, max: number): number => {
@@ -45,3 +48,9 @@ export const getRandomDate = () =>
   dayjs()
     .subtract(getRandomInteger(FIRST_WEEK_DAY, LAST_WEEK_DAY), 'day')
     .toISOString();
+
+export const transformObjectValuesToMockString = (
+  obj: Record<string | number | symbol, string>,
+) => (
+  Object.values(obj).join(';')
+);

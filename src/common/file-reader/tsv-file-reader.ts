@@ -55,7 +55,13 @@ export default class TsvFileReader implements IFileReader {
           guestsNumber,
           price,
           goods: goods?.split(';'),
-          host,
+          host: {
+            name: host.split(';')[0],
+            email: host.split(';')[1],
+            avatar: host.split(';')[2],
+            password: host.split(';')[3],
+            isPro: host.split(';')[4],
+          },
           coordinates: coordinates?.split(';', COORDINATES_NUMBER),
         }),
       );

@@ -67,6 +67,6 @@ export interface IOfferParsed {
   guestsNumber: string;
   price: string;
   goods: string[];
-  host: string;
+  host: Record<string | number | symbol, string>;
   coordinates: string[];
 }

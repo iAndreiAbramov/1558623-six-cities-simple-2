@@ -15,8 +15,8 @@ class GenerateCommand implements ICLICommand {
     isPremium: '',
     apartmentTypes: [''],
     goods: [''],
-    users: [''],
-    coordinates: [''],
+    users: [{'': ''}],
+    coordinates: [{'': ''}],
   };
 
   async execute(...params: string[]): Promise<void> {

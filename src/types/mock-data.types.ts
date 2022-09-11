@@ -1,15 +1,12 @@
-import { IUser } from './user.types';
-import { ICoordinates } from './offer.types';
-
 export interface IMockData {
   titles: string[];
   descriptions: string[];
   cityNames: string[];
   previewImages: string[];
   photos: string[];
-  isPremium: boolean;
+  isPremium: string;
   apartmentTypes: string[];
   goods: string[];
-  users: IUser[];
-  coordinates: ICoordinates[];
+  users: string[];
+  coordinates: string[];
 }

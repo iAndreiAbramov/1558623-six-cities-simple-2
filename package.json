@@ -16,8 +16,8 @@
     "clean": "rimraf dist",
     "ts": "ts-node",
     "mock:server": "json-server ./src/mocks/mock-server-data.json --port 3123",
-    "generate": "npm run ts src/cli.ts -- --generate 10 ./generated/mocks.txt http://localhost:3123/api",
-    "import": "npm run ts src/cli.ts -- --import generated/mocks.txt"
+    "generate": "npm run ts src/cli.ts -- --generate 10 generated/mocks.tsv http://localhost:3123/api",
+    "import": "npm run ts src/cli.ts -- --import generated/mocks.tsv"
   },
   "devDependencies": {
     "@types/node": "^16.11.26",

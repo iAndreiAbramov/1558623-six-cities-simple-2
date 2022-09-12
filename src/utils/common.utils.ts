@@ -54,3 +54,6 @@ export const transformObjectValuesToMockString = (
 ) => (
   Object.values(obj).join(';')
 );
+
+export const getErrorMessage = (error: unknown): string =>
+  error instanceof Error ? error.message : '';

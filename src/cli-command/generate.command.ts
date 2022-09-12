@@ -2,7 +2,7 @@ import { ICLICommand } from '../types/command.types';
 import { IMockData } from '../types/mock-data.types';
 import got from 'got';
 import { OfferGenerator } from '../common/offer-generator/offer-generator.js';
-import { appendFile } from 'fs/promises';
+import FileWriter from '../common/file-writer/file-writer.js';
 
 class GenerateCommand implements ICLICommand {
   readonly name = '--generate';
@@ -21,14 +21,11 @@ class GenerateCommand implements ICLICommand {
     }
 
     const offerStringGenerator = new OfferGenerator(this.initialData);
+    const fileWriter = new FileWriter(filepath);
 
     if (!this.hasFetchError) {
       for (let i = 0; i < offersCount; i++) {
-        await appendFile(
-          filepath,
-          `${offerStringGenerator.generate()}\n`,
-          'utf-8',
-        );
+        await fileWriter.write(offerStringGenerator.generate());
       }
       console.log(`File ${filepath} was created`);
     }

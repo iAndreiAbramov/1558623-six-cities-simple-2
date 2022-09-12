@@ -12,7 +12,7 @@ class ImportCommand implements ICLICommand {
   }
 
   private onEnd = (count: number) => {
-    console.log(`${count} offers created`);
+    console.log(`${count} offers imported`);
   };
 
   async execute(filename: string): Promise<void> {

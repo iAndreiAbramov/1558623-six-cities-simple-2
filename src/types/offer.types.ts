@@ -1,3 +1,5 @@
+import { IUser } from './user.types';
+
 export enum Good {
   Breakfast = 'Breakfast',
   AirConditioning = 'Air conditioning',
@@ -36,10 +38,10 @@ export type ICity = {
 export interface IOffer {
   title: string;
   description: string;
-  dateOfCreation: Date;
+  dateOfCreation: string;
   city: ICity;
   previewImage: string;
-  photos: [string, string, string, string, string, string];
+  photos: string[];
   isPremium: boolean;
   rating: number;
   type: ApartmentType;
@@ -47,11 +49,8 @@ export interface IOffer {
   guestsNumber: number;
   price: number;
   goods: Good[];
-  // TODO: заменить ссылкой на сущность хозяина (п.3.2.1 ТЗ)
-  host: string;
+  host: IUser;
   coordinates: ICoordinates;
-  // TODO: уточнить, что значит "рассчитывается автоматически" (п.3.2.1 ТЗ)
-  commentsNumber?: number;
 }
 
 export interface IOfferParsed {
@@ -68,6 +67,6 @@ export interface IOfferParsed {
   guestsNumber: string;
   price: string;
   goods: string[];
-  host: string;
+  host: Record<string | number | symbol, string>;
   coordinates: string[];
 }

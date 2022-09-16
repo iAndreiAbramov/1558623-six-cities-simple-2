@@ -1,6 +1,6 @@
 export interface ICLICommand {
   readonly name: string;
-  execute: (...params: string[]) => void;
+  execute: (...params: string[]) => Promise<void> | void;
 }
 
 export interface IFileReader {

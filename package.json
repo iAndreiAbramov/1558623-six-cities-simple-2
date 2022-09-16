@@ -14,7 +14,10 @@
     "lint": "eslint src/ --ext .ts",
     "compile": "tsc -p tsconfig.json",
     "clean": "rimraf dist",
-    "ts": "ts-node"
+    "ts": "ts-node",
+    "mock:server": "json-server ./src/mocks/mock-server-data.json --port 3123",
+    "generate": "npm run ts src/cli.ts -- --generate 1000 src/mocks/mocks.tsv http://localhost:3123/api",
+    "import": "npm run ts src/cli.ts -- --import src/mocks/mocks.tsv"
   },
   "devDependencies": {
     "@types/node": "^16.11.26",
@@ -22,6 +25,7 @@
     "@typescript-eslint/parser": "^5.18.0",
     "eslint": "^8.12.0",
     "eslint-config-htmlacademy": "^5.1.2",
+    "json-server": "^0.17.0",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
     "ts-node": "^10.7.0",
@@ -33,6 +37,8 @@
     "npm": "^8.1.0"
   },
   "dependencies": {
-    "chalk": "^5.0.1"
+    "chalk": "^5.0.1",
+    "dayjs": "^1.11.5",
+    "got": "^12.4.1"
   }
 }

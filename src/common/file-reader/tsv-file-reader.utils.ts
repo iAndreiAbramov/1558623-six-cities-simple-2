@@ -23,6 +23,7 @@ export const createOffer = (row: string): IOfferParsed => {
     host,
     coordinates,
   ] = tokens;
+  const [hostName, hostEmail, hostAvatar, hostPassword, isHostPro] = host.split(';');
   return {
     title,
     description,
@@ -38,11 +39,11 @@ export const createOffer = (row: string): IOfferParsed => {
     price,
     goods: goods?.split(';'),
     host: {
-      name: host?.split(';')[0],
-      email: host?.split(';')[1],
-      avatar: host?.split(';')[2],
-      password: host?.split(';')[3],
-      isPro: host?.split(';')[4],
+      name: hostName || '',
+      email: hostEmail || '',
+      avatar: hostAvatar || '',
+      password: hostPassword || '',
+      isPro: isHostPro || '',
     },
     coordinates: coordinates?.split(';', COORDINATES_NUMBER),
   };

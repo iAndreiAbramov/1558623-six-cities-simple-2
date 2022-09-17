@@ -1,13 +1,16 @@
 import { config } from 'dotenv';
-import { IAppConfig, TConfigSchema } from './app-config.types';
-import { ILogger } from '../logger/logger.types';
+import { inject, injectable } from 'inversify';
+import { IConfigService, TConfigSchema } from './app-config.types.js';
+import { ILoggerService } from '../logger/logger.types.js';
 import { appConfigSchema } from './app-config.schema.js';
+import { Component } from '../../types/component.types.js';
 
-export class AppConfigService implements IAppConfig {
+@injectable()
+export class ConfigService implements IConfigService {
   private readonly config: TConfigSchema;
-  private logger: ILogger;
+  private logger: ILoggerService;
 
-  constructor(providedLogger: ILogger) {
+  constructor(@inject(Component.ILoggerService) providedLogger: ILoggerService) {
     this.logger = providedLogger;
 
     const parsedOutput = config();

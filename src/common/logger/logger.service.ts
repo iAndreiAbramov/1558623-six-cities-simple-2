@@ -1,11 +1,14 @@
-import { ILogger } from './logger.types';
+import { ILoggerService } from './logger.types';
 import pino, { Logger } from 'pino';
+import { injectable } from 'inversify';
 
-export default class LoggerService implements ILogger {
+@injectable()
+export default class LoggerService implements ILoggerService {
   private logger!: Logger;
 
   constructor() {
     this.logger = pino();
+    this.logger.info('Logger created');
   }
 
   info(message: string, ...args: unknown[]) {

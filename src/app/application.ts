@@ -1,11 +1,17 @@
-import { ILogger } from '../common/logger/logger.types';
-import { IAppConfig } from '../common/app-config/app-config.types';
+import { inject, injectable } from 'inversify';
+import { ILoggerService } from '../common/logger/logger.types.js';
+import { IConfigService } from '../common/app-config/app-config.types.js';
+import { Component } from '../types/component.types.js';
 
+@injectable()
 export default class Application {
-  private logger!: ILogger;
-  private appConfig!: IAppConfig;
+  private logger!: ILoggerService;
+  private appConfig!: IConfigService;
 
-  constructor(providedLogger: ILogger, providedAppConfig: IAppConfig) {
+  constructor(
+    @inject(Component.ILoggerService) providedLogger: ILoggerService,
+    @inject(Component.IConfigService) providedAppConfig: IConfigService,
+  ) {
     this.logger = providedLogger;
     this.appConfig = providedAppConfig;
   }

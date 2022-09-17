@@ -4,6 +4,6 @@ export type TConfigSchema = {
   DB_HOST: string;
 };
 
-export interface IAppConfig {
+export interface IConfigService {
   get: <T extends keyof TConfigSchema>(key: T) => TConfigSchema[T];
 }

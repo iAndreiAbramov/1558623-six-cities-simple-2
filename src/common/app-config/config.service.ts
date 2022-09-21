@@ -25,7 +25,6 @@ export class ConfigService implements IConfigService {
     appConfigSchema.validate({ allowed: 'strict', output: this.logger.info });
 
     this.config = appConfigSchema.getProperties();
-    console.log(this.config);
 
     this.logger.info('.env file successfully parsed!');
   }

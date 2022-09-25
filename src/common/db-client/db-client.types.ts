@@ -1,4 +1,4 @@
-export interface IDBClient {
+export interface IDbClient {
   connect: (uri: string) => void;
   disconnect: () => void;
 }

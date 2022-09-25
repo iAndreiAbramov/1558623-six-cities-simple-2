@@ -3,7 +3,7 @@ services:
   mongodb:
     image: mongo
     restart: always
-    container_name: mongodb
+    container_name: six-cities-db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 123321

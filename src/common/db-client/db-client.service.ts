@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 import { IDbClient } from './db-client.types';
 import { inject, injectable } from 'inversify';
-import { Component } from '../../types/component.types';
-import { ILoggerService } from '../logger/logger.types';
+import { Component } from '../../types/component.types.js';
+import { ILoggerService } from '../logger/logger.types.js';
 
 @injectable()
 export class DbClientService implements IDbClient {
@@ -11,13 +11,9 @@ export class DbClientService implements IDbClient {
   ) {}
 
   async connect(uri: string) {
-    try {
-      this.logger.info('Connecting to database...');
-      await mongoose.connect(uri);
-      this.logger.info('Database connected');
-    } catch {
-      this.logger.error('Failed to connect to database');
-    }
+    this.logger.info('Connecting to database...');
+    await mongoose.connect(uri);
+    this.logger.info('Database connected');
   }
 
   async disconnect() {

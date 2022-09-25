@@ -1,7 +1,6 @@
 export interface IUser {
   name: string;
   email: string;
-  avatar?: string;
-  password: string;
+  avatar: string;
   isPro: boolean;
 }

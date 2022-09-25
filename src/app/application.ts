@@ -3,7 +3,7 @@ import { ILoggerService } from '../common/logger/logger.types.js';
 import { IConfigService } from '../common/app-config/app-config.types.js';
 import { Component } from '../types/component.types.js';
 import { IDbClient } from '../common/db-client/db-client.types';
-import { getDbConnectionURI } from '../utils/db.utils';
+import { getDbConnectionURI } from '../utils/db.utils.js';
 
 @injectable()
 export default class Application {

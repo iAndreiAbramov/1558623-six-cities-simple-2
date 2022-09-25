@@ -7,7 +7,9 @@ import { ConfigService } from './common/app-config/config.service.js';
 import { IConfigService } from './common/app-config/app-config.types.js';
 import { ILoggerService } from './common/logger/logger.types.js';
 import { IDbClient } from './common/db-client/db-client.types';
-import { DbClientService } from './common/db-client/db-client.service';
+import { DbClientService } from './common/db-client/db-client.service.js';
+import { IUserService } from './modules/user/user-service.types';
+import UserService from './modules/user/user.service.js';
 
 const applicationContainer = new Container();
 applicationContainer
@@ -25,6 +27,10 @@ applicationContainer
 applicationContainer
   .bind<IDbClient>(Component.IDbClient)
   .to(DbClientService)
+  .inSingletonScope();
+applicationContainer
+  .bind<IUserService>(Component.IUserService)
+  .to(UserService)
   .inSingletonScope();
 
 const app = applicationContainer.get<Application>(Component.Application);

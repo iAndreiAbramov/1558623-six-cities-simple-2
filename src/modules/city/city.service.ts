@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { DocumentType, types } from '@typegoose/typegoose';
-import { ICityService } from './city-service.types';
+import { ICityService } from './city.types';
 import { CityEntity } from './city.entity';
 import { Component } from '../../types/component.types';
 import CreateCityDto from './dto/create-city.dto';

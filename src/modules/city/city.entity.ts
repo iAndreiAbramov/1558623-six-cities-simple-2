@@ -14,13 +14,13 @@ export interface CityEntity extends defaultClasses.Base {}
   },
 })
 export class CityEntity extends defaultClasses.TimeStamps implements ICity {
-  @prop({ enum: CityName })
+  @prop({ enum: CityName, required: true })
   name!: CityName;
 
-  @prop()
+  @prop({ required: true })
   latitude!: number;
 
-  @prop()
+  @prop({ required: true })
   longitude!: number;
 }
 

@@ -15,6 +15,9 @@ import { UserEntity, UserModel } from './modules/user/user.entity';
 import { CityEntity, CityModel } from './modules/city/city.entity';
 import CityService from './modules/city/city.service';
 import { ICityService } from './modules/city/city-service.types';
+import { GoodEntity, GoodModel } from './modules/good/good.entity';
+import { IGoodService } from './modules/good/good.types';
+import GoodService from './modules/good/good.service';
 
 const applicationContainer = new Container();
 applicationContainer
@@ -41,6 +44,10 @@ applicationContainer
   .bind<types.ModelType<CityEntity>>(Component.CityModel)
   .toConstantValue(CityModel);
 applicationContainer.bind<ICityService>(Component.ICityService).to(CityService);
+applicationContainer
+  .bind<types.ModelType<GoodEntity>>(Component.GoodModel)
+  .toConstantValue(GoodModel);
+applicationContainer.bind<IGoodService>(Component.IGoodService).to(GoodService);
 
 const app = applicationContainer.get<Application>(Component.Application);
 await app.init();

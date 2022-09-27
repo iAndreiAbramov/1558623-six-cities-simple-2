@@ -1,22 +1,7 @@
 import { IUser } from './user.types';
 import { ICity } from './cities.types';
-
-export enum Good {
-  Breakfast = 'Breakfast',
-  AirConditioning = 'Air conditioning',
-  LaptopFriendlyWorkspace = 'Laptop friendly workspace',
-  BabySeat = 'Baby seat',
-  Washer = 'Washer',
-  Towels = 'Towels',
-  Fridge = 'Fridge',
-}
-
-export enum ApartmentType {
-  Apartment = 'apartment',
-  House = 'house',
-  Room = 'room',
-  Hotel = 'hotel',
-}
+import { ApartmentType } from './apartment.types';
+import { Good } from './good.types';
 
 export interface ICoordinates {
   latitude: number;

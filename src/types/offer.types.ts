@@ -1,4 +1,5 @@
 import { IUser } from './user.types';
+import { ICity } from './cities.types';
 
 export enum Good {
   Breakfast = 'Breakfast',
@@ -8,15 +9,6 @@ export enum Good {
   Washer = 'Washer',
   Towels = 'Towels',
   Fridge = 'Fridge',
-}
-
-export enum CityName {
-  Paris = 'Paris',
-  Cologne = 'Cologne',
-  Brussels = 'Brussels',
-  Amsterdam = 'Amsterdam',
-  Hamburg = 'Hamburg',
-  Dusseldorf = 'Dusseldorf',
 }
 
 export enum ApartmentType {
@@ -30,10 +22,6 @@ export interface ICoordinates {
   latitude: number;
   longitude: number;
 }
-
-export type ICity = {
-  [name in CityName]: ICoordinates;
-};
 
 export interface IOffer {
   title: string;

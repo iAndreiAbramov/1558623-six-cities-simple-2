@@ -28,7 +28,7 @@ export default class CityService implements ICityService {
   async findByNameOrCreate(
     dto: CreateCityDto,
     name: CityName,
-  ): Promise<DocumentType<CityEntity> | null> {
+  ): Promise<DocumentType<CityEntity>> {
     const existingCity = await this.findByName(name);
     return existingCity ? existingCity : this.create(dto);
   }

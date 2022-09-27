@@ -15,15 +15,7 @@ import { UserEntity, UserModel } from './modules/user/user.entity';
 import { CityEntity, CityModel } from './modules/city/city.entity';
 import CityService from './modules/city/city.service';
 import { ICityService } from './modules/city/city.types';
-import { GoodEntity, GoodModel } from './modules/good/good.entity';
-import { IGoodService } from './modules/good/good.types';
-import GoodService from './modules/good/good.service';
-import {
-  ApartmentEntity,
-  ApartmentModel,
-} from './modules/apartment/apartment.entity';
-import ApartmentService from './modules/apartment/apartment.service';
-import { IApartmentService } from './modules/apartment/apartment.types';
+import { OfferEntity, OfferModel } from './modules/offer/offer.entity';
 
 const applicationContainer = new Container();
 applicationContainer
@@ -51,15 +43,8 @@ applicationContainer
   .toConstantValue(CityModel);
 applicationContainer.bind<ICityService>(Component.ICityService).to(CityService);
 applicationContainer
-  .bind<types.ModelType<GoodEntity>>(Component.GoodModel)
-  .toConstantValue(GoodModel);
-applicationContainer.bind<IGoodService>(Component.IGoodService).to(GoodService);
-applicationContainer
-  .bind<types.ModelType<ApartmentEntity>>(Component.ApartmentModel)
-  .toConstantValue(ApartmentModel);
-applicationContainer
-  .bind<IApartmentService>(Component.IApartmentService)
-  .to(ApartmentService);
+  .bind<types.ModelType<OfferEntity>>(Component.OfferModel)
+  .toConstantValue(OfferModel);
 
 const app = applicationContainer.get<Application>(Component.Application);
 await app.init();

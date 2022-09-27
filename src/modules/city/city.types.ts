@@ -9,5 +9,5 @@ export interface ICityService {
   findByNameOrCreate: (
     dto: CreateCityDto,
     name: CityName,
-  ) => Promise<DocumentType<CityEntity> | null>;
+  ) => Promise<DocumentType<CityEntity>>;
 }

@@ -8,7 +8,7 @@ export interface ICoordinates {
   longitude: number;
 }
 
-export interface IOffer {
+export interface IOfferFront {
   title: string;
   description: string;
   dateOfCreation: string;

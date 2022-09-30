@@ -39,7 +39,7 @@ export const appConfigSchema = convict<TConfigSchema>({
     doc: 'Port to DB connection',
     format: 'port',
     env: 'DB_PORT',
-    default: 27017,
+    default: '27017',
   },
   DB_NAME: {
     doc: 'Database name (Mongo DB)',

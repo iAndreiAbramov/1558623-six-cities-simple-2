@@ -10,9 +10,9 @@ import { ILoggerService } from '../../common/logger/logger.types';
 @injectable()
 export default class CityService implements ICityService {
   constructor(
+    @inject(Component.ILoggerService) private readonly logger: ILoggerService,
     @inject(Component.CityModel)
     private readonly cityModel: types.ModelType<CityEntity>,
-    @inject(Component.ILoggerService) private readonly logger: ILoggerService,
   ) {}
 
   async create(dto: CreateCityDto): Promise<DocumentType<CityEntity>> {

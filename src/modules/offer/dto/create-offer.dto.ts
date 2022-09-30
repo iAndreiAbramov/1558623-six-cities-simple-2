@@ -4,7 +4,6 @@ import { Good } from '../../../types/good.types';
 export default class CreateOfferDto {
   title!: string;
   description!: string;
-  dateOfCreation!: string;
   cityId!: string;
   previewImage!: string;
   photos!: string[];
@@ -16,6 +15,5 @@ export default class CreateOfferDto {
   price!: number;
   goods!: Good[];
   hostId!: string;
-  latitude!: number;
-  longitude!: number;
+  coordinates!: number[];
 }

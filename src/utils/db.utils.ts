@@ -8,6 +8,6 @@ export const getDbConnectionURI = ({
   dbUser: string;
   dbPassword: string;
   dbHost: string;
-  dbPort: number;
+  dbPort: string;
   dbName: string;
 }): string => `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?authSource=admin`;

@@ -9,7 +9,6 @@ import { OfferEntity } from './offer.entity';
 export interface IOffer {
   title: string;
   description: string;
-  dateOfCreation: string;
   city: Ref<CityEntity>;
   previewImage: string;
   photos: string[];
@@ -21,8 +20,7 @@ export interface IOffer {
   price: number;
   goods: Good[];
   host: Ref<UserEntity>;
-  latitude: number;
-  longitude: number;
+  coordinates: number[];
 }
 
 export interface IOfferService {

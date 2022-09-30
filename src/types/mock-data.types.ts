@@ -1,7 +1,7 @@
 export interface IMockData {
   titles: string[];
   descriptions: string[];
-  cityNames: string[];
+  cities: Record<string | number | symbol, string>[];
   previewImages: string[];
   photos: string[];
   isPremium: string;

@@ -25,9 +25,6 @@ export class OfferEntity extends defaultClasses.TimeStamps implements IOffer {
   @prop({ required: true })
   description!: string;
 
-  @prop({ type: Date })
-  dateOfCreation!: string;
-
   @prop({ required: true, ref: CityEntity, _id: false })
   city!: Ref<CityEntity>;
 
@@ -61,11 +58,8 @@ export class OfferEntity extends defaultClasses.TimeStamps implements IOffer {
   @prop({ required: true, ref: UserEntity })
   host!: Ref<UserEntity>;
 
-  @prop({ required: true })
-  latitude!: number;
-
-  @prop({ required: true })
-  longitude!: number;
+  @prop({ required: true, type: Number })
+  coordinates!: number[];
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

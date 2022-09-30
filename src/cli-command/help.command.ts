@@ -1,5 +1,5 @@
 import { ICLICommand } from '../types/command.types';
-import { logCyan } from '../utils/chalk.utils';
+import { logCyan } from '../utils/chalk.utils.js';
 import chalk from 'chalk';
 
 class HelpCommand implements ICLICommand {

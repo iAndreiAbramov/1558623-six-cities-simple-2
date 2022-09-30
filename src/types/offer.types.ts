@@ -30,16 +30,16 @@ export interface IOfferParsed {
   title: string;
   description: string;
   dateOfCreation: string;
-  city: string;
+  city: ICity;
   previewImage: string;
   photos: string[];
-  isPremium: string;
-  rating: string;
-  type: string;
-  roomsNumber: string;
-  guestsNumber: string;
-  price: string;
-  goods: string[];
-  host: Record<string | number | symbol, string>;
-  coordinates: string[];
+  isPremium: boolean;
+  rating: number;
+  type: ApartmentType;
+  roomsNumber: number;
+  guestsNumber: number;
+  price: number;
+  goods: Good[];
+  host: IUser;
+  coordinates: number[];
 }

@@ -57,6 +57,5 @@ export const transformObjectValuesToMockString = (
 export const getErrorMessage = (error: unknown): string =>
   error instanceof Error ? error.message : '';
 
-export const createSHA256 = (password: string, salt: string) => {
-  return crypto.createHmac('sha256', salt).update(password).digest('hex');
-};
+export const createSHA256 = (password: string, salt: string) =>
+  crypto.createHmac('sha256', salt).update(password).digest('hex');

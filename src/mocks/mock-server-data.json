@@ -24,7 +24,7 @@
     ],
     "cities": [
       {
-        "name": "CityName",
+        "name": "Paris",
         "latitude": "48.85661",
         "longitude": "2.351499"
       },
@@ -98,14 +98,14 @@
       {
         "name": "host 1",
         "email": "fake1@fake.com",
-        "avatar": "avatar1",
-        "isPro": "true"
+        "avatar": "avatar1.jpg",
+        "isPro": true
       },
       {
         "name": "host 2",
         "email": "fake2@fake.com",
-        "avatar": "avatar2",
-        "isPro": "false"
+        "avatar": "avatar2.png",
+        "isPro": false
       }
     ],
     "coordinates": [

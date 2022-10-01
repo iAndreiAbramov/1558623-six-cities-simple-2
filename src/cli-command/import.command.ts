@@ -9,14 +9,14 @@ import { DbClientService } from '../common/db-client/db-client.service.js';
 import { getDbConnectionURI } from '../utils/db.utils.js';
 import { IUserService } from '../modules/user/user.types';
 import { IOfferParsed } from '../types/offer.types';
-import UserService from '../modules/user/user.service';
-import { UserModel } from '../modules/user/user.entity';
+import UserService from '../modules/user/user.service.js';
+import { UserModel } from '../modules/user/user.entity.js';
 import { ICityService } from '../modules/city/city.types';
 import { IOfferService } from '../modules/offer/offer.types';
-import CityService from '../modules/city/city.service';
-import { CityModel } from '../modules/city/city.entity';
-import OfferService from '../modules/offer/offer.service';
-import { OfferModel } from '../modules/offer/offer.entity';
+import CityService from '../modules/city/city.service.js';
+import { CityModel } from '../modules/city/city.entity.js';
+import OfferService from '../modules/offer/offer.service.js';
+import { OfferModel } from '../modules/offer/offer.entity.js';
 
 const DEFAULT_USER_PASSWORD = '123456';
 
@@ -67,9 +67,9 @@ class ImportCommand implements ICLICommand {
     resolve();
   }
 
-  private readonly onEnd = (count: number) => {
+  private readonly onEnd = async (count: number) => {
     console.log(`${count} offers imported`);
-    this.databaseService.disconnect();
+    await this.databaseService.disconnect();
   };
 
   async execute(
@@ -79,6 +79,7 @@ class ImportCommand implements ICLICommand {
     dbHost: string,
     dbPort: string,
     dbName: string,
+    salt: string,
   ): Promise<void> {
     const uri = getDbConnectionURI({
       dbUser,
@@ -87,8 +88,9 @@ class ImportCommand implements ICLICommand {
       dbPort,
       dbName,
     });
+    this.salt = salt;
 
-    this.databaseService.connect(uri);
+    await this.databaseService.connect(uri);
 
     const fileReader = new TsvFileReader(filename?.trim());
     fileReader.on('line', this.onLineReady);
@@ -96,6 +98,7 @@ class ImportCommand implements ICLICommand {
 
     await fileReader.read().catch((err) => {
       console.log(`Failed to read file ${filename}: ${getErrorMessage(err)}`);
+      this.onEnd(0);
     });
   }
 }

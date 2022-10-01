@@ -11,7 +11,7 @@ export interface UserEntity extends defaultClasses.Base {}
 
 @modelOptions({
   schemaOptions: {
-    collection: 'users',
+    collection: 'Users',
   },
 })
 export class UserEntity extends defaultClasses.TimeStamps implements IUser {
@@ -51,8 +51,6 @@ export class UserEntity extends defaultClasses.TimeStamps implements IUser {
   @prop({
     required: true,
     default: '',
-    minlength: [6, 'Password minimum length is 6 characters'],
-    maxlength: [12, 'Password maximum length is 12 characters'],
     trim: true,
   })
   private password!: string;

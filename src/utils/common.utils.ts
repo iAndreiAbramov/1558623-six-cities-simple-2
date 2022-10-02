@@ -3,6 +3,7 @@ import {
   LAST_WEEK_DAY,
 } from '../constants/common.constants.js';
 import dayjs from 'dayjs';
+import * as crypto from 'crypto';
 
 export const getRandomInteger = (min: number, max: number): number => {
   let startValue = Math.ceil(Math.min(min, max));
@@ -51,9 +52,10 @@ export const getRandomDate = () =>
 
 export const transformObjectValuesToMockString = (
   obj: Record<string | number | symbol, string>,
-) => (
-  Object.values(obj).join(';')
-);
+) => Object.values(obj).join(';');
 
 export const getErrorMessage = (error: unknown): string =>
   error instanceof Error ? error.message : '';
+
+export const createSHA256 = (password: string, salt: string) =>
+  crypto.createHmac('sha256', salt).update(password).digest('hex');

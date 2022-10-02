@@ -34,7 +34,7 @@ export class OfferGenerator implements IOfferGenerator {
     const {
       titles,
       descriptions,
-      cityNames,
+      cities,
       previewImages,
       photos,
       apartmentTypes,
@@ -46,7 +46,7 @@ export class OfferGenerator implements IOfferGenerator {
     const title = getRandomArrayItem(titles);
     const description = getRandomArrayItem(descriptions);
     const dateOfCreation = getRandomDate();
-    const cityName = getRandomArrayItem(cityNames);
+    const city = transformObjectValuesToMockString(getRandomArrayItem(cities));
     const previewImage = getRandomArrayItem(previewImages);
     const randomPhotos = getRandomArrayItems(
       photos,
@@ -77,7 +77,7 @@ export class OfferGenerator implements IOfferGenerator {
       title,
       description,
       dateOfCreation,
-      cityName,
+      city,
       previewImage,
       randomPhotos,
       isPremium,

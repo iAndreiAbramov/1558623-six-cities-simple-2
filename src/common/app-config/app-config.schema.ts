@@ -22,5 +22,29 @@ export const appConfigSchema = convict<TConfigSchema>({
     format: 'ipaddress',
     env: 'DB_HOST',
     default: '127.0.0.1',
+  },
+  DB_USER: {
+    doc: 'Username for database',
+    format: String,
+    env: 'DB_USER',
+    default: null,
+  },
+  DB_PASSWORD: {
+    doc: 'Password for database connection',
+    format: String,
+    env: 'DB_PASSWORD',
+    default: null,
+  },
+  DB_PORT: {
+    doc: 'Port to DB connection',
+    format: 'port',
+    env: 'DB_PORT',
+    default: '27017',
+  },
+  DB_NAME: {
+    doc: 'Database name (Mongo DB)',
+    format: String,
+    env: 'DB_NAME',
+    default: 'six-cities-db',
   }
 });

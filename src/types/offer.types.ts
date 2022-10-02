@@ -1,41 +1,14 @@
 import { IUser } from './user.types';
-
-export enum Good {
-  Breakfast = 'Breakfast',
-  AirConditioning = 'Air conditioning',
-  LaptopFriendlyWorkspace = 'Laptop friendly workspace',
-  BabySeat = 'Baby seat',
-  Washer = 'Washer',
-  Towels = 'Towels',
-  Fridge = 'Fridge',
-}
-
-export enum CityName {
-  Paris = 'Paris',
-  Cologne = 'Cologne',
-  Brussels = 'Brussels',
-  Amsterdam = 'Amsterdam',
-  Hamburg = 'Hamburg',
-  Dusseldorf = 'Dusseldorf',
-}
-
-export enum ApartmentType {
-  Apartment = 'apartment',
-  House = 'house',
-  Room = 'room',
-  Hotel = 'hotel',
-}
+import { ICity } from './cities.types';
+import { ApartmentType } from './apartment.types';
+import { Good } from './good.types';
 
 export interface ICoordinates {
   latitude: number;
   longitude: number;
 }
 
-export type ICity = {
-  [name in CityName]: ICoordinates;
-};
-
-export interface IOffer {
+export interface IOfferFront {
   title: string;
   description: string;
   dateOfCreation: string;
@@ -57,16 +30,16 @@ export interface IOfferParsed {
   title: string;
   description: string;
   dateOfCreation: string;
-  city: string;
+  city: ICity;
   previewImage: string;
   photos: string[];
-  isPremium: string;
-  rating: string;
-  type: string;
-  roomsNumber: string;
-  guestsNumber: string;
-  price: string;
-  goods: string[];
-  host: Record<string | number | symbol, string>;
-  coordinates: string[];
+  isPremium: boolean;
+  rating: number;
+  type: ApartmentType;
+  roomsNumber: number;
+  guestsNumber: number;
+  price: number;
+  goods: Good[];
+  host: IUser;
+  coordinates: number[];
 }

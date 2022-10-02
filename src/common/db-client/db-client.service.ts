@@ -5,7 +5,7 @@ import { Component } from '../../types/component.types.js';
 import { ILoggerService } from '../logger/logger.types.js';
 
 @injectable()
-export class DbClientService implements IDbClient {
+export default class DbClientService implements IDbClient {
   constructor(
     @inject(Component.ILoggerService) private logger: ILoggerService,
   ) {}

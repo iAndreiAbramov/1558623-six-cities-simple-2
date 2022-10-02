@@ -1,0 +1,611 @@
+openapi: 3.0.3
+info:
+  title: API сервер для учебного-проекта «Шесть городов».
+  description: |-
+    * Список ресурсов и маршрутов сервера «Шесть городов».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 2.0.0
+tags:
+  - name: offer
+    description: Действия с одним объявлением
+  - name: offers
+    description: Действия со списком объявлений
+  - name: user
+    description: Действия с пользователем
+  - name: comment
+    description: Действия с отдельным комментарием
+  - name: comments
+    description: Действия со списком комментариев
+
+
+paths:
+  /offer:
+    post:
+      tags:
+        - offer
+      summary: Создание нового предложения
+      description: Создает новое предложение об аренде, требуется авторизация
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offerPost'
+
+      responses:
+        200:
+          description: Предложение создано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offerGetFull'
+        401:
+          $ref: '#/components/responses/UnAuthorized'
+
+    put:
+      tags:
+        - offer
+      summary: Редактирование предложения
+      description: Редактирует предложение об аренде по id, требуется авторизация
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offerUpdate'
+
+      responses:
+        200:
+          description: Предложение отредактировано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offerGetFull'
+        400:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/UnAuthorized'
+
+    get:
+      tags:
+        - offer
+      summary: Подробная информация о предложении
+      description: Подробная информация о предложении по id. Доступно всем пользователям.
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/offerById"
+
+      responses:
+        200:
+          description: Предложение получено
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/offerGetFull"
+        400:
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags:
+        - offer
+      summary: Удаление предложения
+      description: Удаляет предложение об аренде по id, требуется авторизация
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/offerById"
+
+      responses:
+        201:
+          description: Предложение удалено
+        400:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/UnAuthorized'
+
+  /offers?number={offersNumber}:
+    get:
+      tags:
+        - offers
+      summary: Запрос списка предложений
+      description: Возвращает список предложений в соотв. с указанным количеством (по умолчанию 60)
+      parameters:
+        - $ref: '#/components/parameters/offersNumber'
+
+      responses:
+        200:
+          description: Предложения получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {
+                  $ref: "#/components/schemas/offerGetShort",
+                }
+
+  /comment:
+    post:
+      tags:
+        - comment
+      summary: Добавить комментарий
+      description: Добавить комментарий для предложения. Требуется авторизация
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/commentPost'
+
+      responses:
+        200:
+          description: Комментарий добавлен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/commentGet"
+        400:
+          $ref: "#/components/responses/NotFound"
+        401:
+          $ref: "#/components/responses/UnAuthorized"
+
+  /comments:
+    get:
+      tags:
+        - comments
+      summary: Список комментариев для предложения
+      description: Список комментариев для предложения по id. Доступно всем пользователям.
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/commentByOfferId"
+
+      responses:
+        200:
+          description: Комментарии получены
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/commentGet"
+        400:
+          $ref: "#/components/responses/NotFound"
+
+  /user/create:
+    post:
+      tags:
+        - user
+      summary: Добавление пользователя
+      description: Добавить нового пользователя
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/userPost"
+
+      responses:
+        200:
+          description: Пользователь создан
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userGet"
+
+  /user/check:
+    post:
+      tags:
+        - user
+      summary: Проверка авторизации пользователя
+      description: Проверяет авторизацию пользователя
+      parameters:
+        - $ref: "#/components/parameters/X-Token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/userCheck"
+      responses:
+        200:
+          description: Пользователь авторизован
+          headers:
+            X-Token:
+              $ref: "#/components/headers/X-Token"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userGet"
+        400:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/UnAuthorized'
+
+  /user/login:
+    post:
+      tags:
+        - user
+      summary: Авторизация пользователя
+      description: Авторизация пользователя по email и password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/userLogin"
+      responses:
+        200:
+          description: Пользователь авторизован
+          headers:
+            X-Token:
+              $ref: "#/components/headers/X-Token"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userGet"
+        400:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/UnAuthorized'
+
+components:
+  responses:
+    NotFound:
+      description: Объект не найден
+      content:
+        application/json:
+          schema:
+            properties:
+              code:
+                type: number
+                example: 400
+              message:
+                type: string
+                example: "Object not found"
+    UnAuthorized:
+      description: Ошибка авторизации
+      content:
+        application/json:
+          schema:
+            properties:
+              code:
+                type: number
+                example: 401
+              message:
+                type: string
+                example: "User unauthorized"
+
+  parameters:
+    offersNumber:
+      name: offersNumber
+      in: query
+      example: 5
+    X-Token:
+      name: "X-Token"
+      description: Сессионный токен
+      in: header
+      example: "asd123231lkj1klj123kj12ABjASl"
+
+  headers:
+    X-Token:
+      description: Сессионный токен
+      required: true
+      schema:
+        type: string
+        example: "asd123231lkj1klj123kj12ABjASl"
+
+  schemas:
+    coordinates:
+      type: object
+      properties:
+        latitude:
+          type: number
+          example: 48.85661
+          required: true
+        longitude:
+          type: number
+          example: 2.351499
+          required: true
+
+    city:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Paris"
+          required: true
+        coordinates:
+          $ref: "#/components/schemas/coordinates"
+
+    commentPost:
+      type: object
+      properties:
+        offerId:
+          required: true
+          type: string
+          example: "633834d7ce3a94d52ba2dcee"
+        text:
+          type: string
+          example: "Very nice place"
+          required: true
+        rating:
+          type: number
+          example: 4.4
+          required: true
+        authorEmail:
+          type: string
+          example: "fake1@fake.com"
+          required: true
+
+    commentGet:
+      type: object
+      properties:
+        text:
+          type: string
+          example: "Very nice place"
+        rating:
+          type: number
+          example: 4.4
+        creationDate:
+          type: string
+          example: "01.01.2022"
+        author:
+          $ref: "#/components/schemas/userGet"
+
+    commentByOfferId:
+      type: object
+      properties:
+        offerId:
+          type: string
+          example: "633834d7ce3a94d52ba2dcee"
+
+    userGet:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "633834d7ce3a94d52ba2dcee"
+        name:
+          type: string
+          example: "host 1"
+        email:
+          type: string
+          example: "fake1@fake.com"
+        avatar:
+          type: string
+          example: "avatar1.jpg"
+        isPro:
+          type: boolean
+          example: true
+
+    userPost:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "host 1"
+          required: true
+        avatar:
+          type: string
+          example: "avatar1.jpg"
+          required: false
+        email:
+          type: string
+          example: "fake1@fake.com"
+          required: true
+        password:
+          type: string
+          example: "user321123"
+          required: true
+        isPro:
+          type: boolean
+          example: true
+          required: true
+
+    userCheck:
+      type: object
+      properties:
+        userEmail:
+          type: string
+          example: "fake1@fake.fake"
+
+    userLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          example: 'fake1@fake.com'
+        password:
+          type: string
+          example: "QaDAF312"
+
+    offerGetShort:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "633834d7ce3a94d52ba2dcee"
+        price:
+          type: number
+          example: 10000
+        title:
+          type: string
+          example: "Amazing and Extremely Central Flat"
+        type:
+          type: string
+          example: "flat"
+        city:
+          $ref: "#/components/schemas/city"
+        previewImage:
+          type: string
+          example: "preview/image-1.jpg"
+        isPremium:
+          type: boolean
+          example: true
+        offersNumber:
+          type: number
+          example: 8
+
+    offerGetFull:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "633834d7ce3a94d52ba2dcee"
+        title:
+          type: string
+          example: "Amazing and Extremely Central Flat"
+        description:
+          type: string
+          example: "Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country. In our beautiful screened Pondhouse, you can gaze at the stars and listen to the sounds of nature from your cozy warm bed."
+        city:
+          $ref: "#/components/schemas/city"
+        previewImage:
+          type: string
+          example: "preview/image-1.jpg"
+        photos:
+          type: array
+          example: [ "photo-1", "photo-2", "photo-3", "photo-4", "photo-5", "photo-6" ]
+        isPremium:
+          type: boolean
+          example: true
+        type:
+          type: string
+          example: "flat"
+        roomsNumber:
+          type: number
+          example: 4
+        guestsNumber:
+          type: number
+          example: 4
+        price:
+          type: number
+          example: 10000
+        goods:
+          type: array
+          example: [ "Breakfast", "Air conditioning", "Laptop friendly workspace", "Baby seat", "Washer", "Towels", "Fridge" ]
+        host:
+          $ref: "#/components/schemas/userGet"
+        coordinates:
+          $ref: "#/components/schemas/coordinates"
+
+    offerUpdate:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "633834d7ce3a94d52ba2dcee"
+          required: true
+        title:
+          type: string
+          example: "Amazing and Extremely Central Flat"
+        description:
+          type: string
+          example: "Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country. In our beautiful screened Pondhouse, you can gaze at the stars and listen to the sounds of nature from your cozy warm bed."
+        city:
+          $ref: "#/components/schemas/city"
+        previewImage:
+          type: string
+          example: "preview/image-1.jpg"
+        photos:
+          type: array
+          example: [ "photo-1", "photo-2", "photo-3", "photo-4", "photo-5", "photo-6" ]
+        isPremium:
+          type: boolean
+          example: true
+        type:
+          type: string
+          example: "flat"
+        roomsNumber:
+          type: number
+          example: 4
+        guestsNumber:
+          type: number
+          example: 4
+        price:
+          type: number
+          example: 10000
+        goods:
+          type: array
+          example: [ "Breakfast", "Air conditioning", "Laptop friendly workspace", "Baby seat", "Washer", "Towels", "Fridge" ]
+        coordinates:
+          $ref: "#/components/schemas/coordinates"
+
+    offerById:
+      type: object
+      properties:
+        offerId:
+          type: string
+          example: "633834d7ce3a94d52ba2dcee"
+
+    offerPost:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Amazing and Extremely Central Flat"
+          required: true
+        description:
+          type: string
+          example: "Relax, rejuvenate and unplug in this ultimate rustic getaway experience in the country. In our beautiful screened Pondhouse, you can gaze at the stars and listen to the sounds of nature from your cozy warm bed."
+          required: true
+        cityName:
+          type: string
+          example: "Paris"
+          required: true
+        previewImage:
+          type: string
+          example: "preview/image-1.jpg"
+          required: true
+        photos:
+          type: array
+          example: [ "photo-1", "photo-2", "photo-3", "photo-4", "photo-5", "photo-6" ]
+          required: true
+        type:
+          type: string
+          example: "flat"
+          required: true
+        roomsNumber:
+          type: number
+          example: 4
+          required: true
+        guestsNumber:
+          type: number
+          example: 4
+          required: true
+        price:
+          type: number
+          example: 10000
+          required: true
+        goods:
+          type: array
+          example: [ "Breakfast", "Air conditioning", "Laptop friendly workspace", "Baby seat", "Washer", "Towels", "Fridge" ]
+          required: true
+        isPremium:
+          type: boolean
+          example: true
+          required: true
+        hostEmail:
+          type: string
+          example: "fake1@fake.com"
+          required: true
+        coordinates:
+          $ref: "#/components/schemas/coordinates"

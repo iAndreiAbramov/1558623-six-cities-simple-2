@@ -5,6 +5,7 @@ import { CityEntity } from '../city/city.entity';
 import { UserEntity } from '../user/user.entity';
 import CreateOfferDto from './dto/create-offer.dto';
 import { OfferEntity } from './offer.entity';
+import UpdateOfferDto from './dto/update-offer.dto';
 
 export interface IOffer {
   title: string;
@@ -25,5 +26,8 @@ export interface IOffer {
 
 export interface IOfferService {
   create: (dto: CreateOfferDto) => Promise<DocumentType<OfferEntity>>;
+  update: (dto: UpdateOfferDto) => Promise<DocumentType<OfferEntity> | null>;
   findById: (id: string) => Promise<DocumentType<OfferEntity> | null>;
+  deleteById: (offerId: string) => Promise<string | null>;
+  getList: (offersNumber?: number) => Promise<DocumentType<OfferEntity>[]>;
 }

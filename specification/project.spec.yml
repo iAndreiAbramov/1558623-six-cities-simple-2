@@ -113,7 +113,7 @@ paths:
         401:
           $ref: '#/components/responses/UnAuthorized'
 
-  /offers?number={offersNumber}:
+  /offers?offersNumber={offersNumber}:
     get:
       tags:
         - offers
@@ -296,6 +296,7 @@ components:
   parameters:
     offersNumber:
       name: offersNumber
+      description: Количество объявлений
       in: query
       example: 5
     X-Token:
@@ -446,6 +447,9 @@ components:
         price:
           type: number
           example: 10000
+        rating:
+          type: number
+          example: 4.4
         title:
           type: string
           example: "Amazing and Extremely Central Flat"
@@ -460,9 +464,6 @@ components:
         isPremium:
           type: boolean
           example: true
-        offersNumber:
-          type: number
-          example: 8
 
     offerGetFull:
       type: object

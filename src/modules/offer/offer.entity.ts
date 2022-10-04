@@ -60,6 +60,9 @@ export class OfferEntity extends defaultClasses.TimeStamps implements IOffer {
 
   @prop({ required: true, type: Number })
   coordinates!: number[];
+
+  @prop({ required: false, type: Number })
+  commentCount = 0;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

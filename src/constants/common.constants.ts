@@ -14,3 +14,4 @@ export const MAX_PRICE = 100000;
 export const DECIMALS_IN_PRICE = 2;
 export const MIN_GOODS_NUMBER = 1;
 export const DEFAULT_OFFERS_NUMBER = 60;
+export const DEFAULT_COMMENTS_NUMBER = 50;

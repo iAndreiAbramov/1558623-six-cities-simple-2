@@ -172,9 +172,7 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/commentByOfferId"
+              $ref: "#/components/schemas/commentByOfferId"
 
       responses:
         200:
@@ -377,6 +375,10 @@ components:
         offerId:
           type: string
           example: "633834d7ce3a94d52ba2dcee"
+        commentsNumber:
+          required: false
+          type: number
+          example: 25
 
     userGet:
       type: object

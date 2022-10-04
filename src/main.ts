@@ -16,6 +16,9 @@ import { ICityService } from './modules/city/city.types';
 import { UserEntity, UserModel } from './modules/user/user.entity.js';
 import { CityEntity, CityModel } from './modules/city/city.entity.js';
 import { OfferEntity, OfferModel } from './modules/offer/offer.entity.js';
+import { CommentEntity, CommentModel } from './modules/comments/comment.entity';
+import CommentService from './modules/comments/comment.service';
+import { ICommentService } from './modules/comments/comment.types';
 
 const applicationContainer = new Container();
 applicationContainer
@@ -45,6 +48,10 @@ applicationContainer.bind<ICityService>(Component.ICityService).to(CityService);
 applicationContainer
   .bind<types.ModelType<OfferEntity>>(Component.OfferModel)
   .toConstantValue(OfferModel);
+applicationContainer.bind<ICommentService>(Component.ICommentService).to(CommentService);
+applicationContainer
+  .bind<types.ModelType<CommentEntity>>(Component.CommentModel)
+  .toConstantValue(CommentModel);
 
 const app = applicationContainer.get<Application>(Component.Application);
 await app.init();

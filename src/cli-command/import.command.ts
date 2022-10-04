@@ -5,7 +5,6 @@ import { getErrorMessage } from '../utils/common.utils.js';
 import { ILoggerService } from '../common/logger/logger.types';
 import LoggerService from '../common/logger/logger.service.js';
 import { IDbClient } from '../common/db-client/db-client.types';
-import { DbClientService } from '../common/db-client/db-client.service.js';
 import { getDbConnectionURI } from '../utils/db.utils.js';
 import { IUserService } from '../modules/user/user.types';
 import { IOfferParsed } from '../types/offer.types';
@@ -17,6 +16,7 @@ import CityService from '../modules/city/city.service.js';
 import { CityModel } from '../modules/city/city.entity.js';
 import OfferService from '../modules/offer/offer.service.js';
 import { OfferModel } from '../modules/offer/offer.entity.js';
+import DbClientService from '../common/db-client/db-client.service.js';
 
 const DEFAULT_USER_PASSWORD = '123456';
 

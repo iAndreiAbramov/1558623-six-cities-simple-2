@@ -30,4 +30,5 @@ export interface IOfferService {
   findById: (id: string) => Promise<DocumentType<OfferEntity> | null>;
   deleteById: (offerId: string) => Promise<string | null>;
   getList: (offersNumber?: number) => Promise<DocumentType<OfferEntity>[]>;
+  incCommentsCount: (offerId: string) => Promise<DocumentType<OfferEntity> | null>;
 }

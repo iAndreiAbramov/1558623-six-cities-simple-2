@@ -13,5 +13,5 @@ export const MIN_PRICE = 100;
 export const MAX_PRICE = 100000;
 export const DECIMALS_IN_PRICE = 2;
 export const MIN_GOODS_NUMBER = 1;
-export const DEFAULT_DB_PORT = 27017;
-export const DEFAULT_USER_PASSWORD = '123321';
+export const DEFAULT_OFFERS_NUMBER = 60;
+export const DEFAULT_COMMENTS_NUMBER = 50;

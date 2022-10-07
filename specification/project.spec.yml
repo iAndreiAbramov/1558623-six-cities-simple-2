@@ -113,7 +113,7 @@ paths:
         401:
           $ref: '#/components/responses/UnAuthorized'
 
-  /offers?number={offersNumber}:
+  /offers?offersNumber={offersNumber}:
     get:
       tags:
         - offers
@@ -172,9 +172,7 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/commentByOfferId"
+              $ref: "#/components/schemas/commentByOfferId"
 
       responses:
         200:
@@ -296,6 +294,7 @@ components:
   parameters:
     offersNumber:
       name: offersNumber
+      description: Количество объявлений
       in: query
       example: 5
     X-Token:
@@ -376,6 +375,10 @@ components:
         offerId:
           type: string
           example: "633834d7ce3a94d52ba2dcee"
+        commentsNumber:
+          required: false
+          type: number
+          example: 25
 
     userGet:
       type: object
@@ -446,6 +449,9 @@ components:
         price:
           type: number
           example: 10000
+        rating:
+          type: number
+          example: 4.4
         title:
           type: string
           example: "Amazing and Extremely Central Flat"
@@ -460,9 +466,6 @@ components:
         isPremium:
           type: boolean
           example: true
-        offersNumber:
-          type: number
-          example: 8
 
     offerGetFull:
       type: object

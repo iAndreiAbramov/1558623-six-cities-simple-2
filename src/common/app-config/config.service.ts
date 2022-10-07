@@ -6,7 +6,7 @@ import { appConfigSchema } from './app-config.schema.js';
 import { Component } from '../../types/component.types.js';
 
 @injectable()
-export class ConfigService implements IConfigService {
+export default class ConfigService implements IConfigService {
   private readonly config: TConfigSchema;
   private logger: ILoggerService;
 

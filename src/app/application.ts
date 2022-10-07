@@ -4,21 +4,18 @@ import { IConfigService } from '../common/app-config/app-config.types.js';
 import { Component } from '../types/component.types.js';
 import { IDbClient } from '../common/db-client/db-client.types';
 import { getDbConnectionURI } from '../utils/db.utils.js';
+import express, { Express } from 'express';
 
 @injectable()
 export default class Application {
-  private logger!: ILoggerService;
-  private appConfig!: IConfigService;
-  private dbClient!: IDbClient;
+  private app: Express;
 
   constructor(
-    @inject(Component.ILoggerService) providedLogger: ILoggerService,
-    @inject(Component.IConfigService) providedAppConfig: IConfigService,
-    @inject(Component.IDbClient) providedDbClient: IDbClient,
+    @inject(Component.ILoggerService) private logger: ILoggerService,
+    @inject(Component.IConfigService) private appConfig: IConfigService,
+    @inject(Component.IDbClient) private dbClient: IDbClient,
   ) {
-    this.logger = providedLogger;
-    this.appConfig = providedAppConfig;
-    this.dbClient = providedDbClient;
+    this.app = express();
   }
 
   async init(): Promise<void> {
@@ -32,5 +29,9 @@ export default class Application {
         dbName: this.appConfig.get('DB_NAME'),
       }),
     );
+
+    const port = this.appConfig.get('PORT');
+    this.app.listen(port);
+    this.logger.info(`Server started on port: ${port}`);
   }
 }

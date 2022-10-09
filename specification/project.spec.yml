@@ -19,9 +19,8 @@ tags:
   - name: comments
     description: Действия со списком комментариев
 
-
 paths:
-  /offer:
+  /offer/create:
     post:
       tags:
         - offer
@@ -45,18 +44,15 @@ paths:
         401:
           $ref: '#/components/responses/UnAuthorized'
 
-    put:
+  /offer/update/:offerId:
+    patch:
       tags:
         - offer
       summary: Редактирование предложения
       description: Редактирует предложение об аренде по id, требуется авторизация
 
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/offerUpdate'
+      parameters:
+        - $ref: '#/components/parameters/offerId'
 
       responses:
         200:
@@ -70,18 +66,15 @@ paths:
         401:
           $ref: '#/components/responses/UnAuthorized'
 
+  /offer/details/:offerId:
     get:
       tags:
         - offer
       summary: Подробная информация о предложении
       description: Подробная информация о предложении по id. Доступно всем пользователям.
 
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/offerById"
+      parameters:
+        - $ref: '#/components/parameters/offerId'
 
       responses:
         200:
@@ -93,18 +86,14 @@ paths:
         400:
           $ref: '#/components/responses/NotFound'
 
+  /offer/delete/:offerId:
     delete:
       tags:
         - offer
       summary: Удаление предложения
       description: Удаляет предложение об аренде по id, требуется авторизация
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/offerById"
-
+      parameters:
+        - $ref: '#/components/parameters/offerId'
       responses:
         201:
           description: Предложение удалено
@@ -297,6 +286,11 @@ components:
       description: Количество объявлений
       in: query
       example: 5
+    offerId:
+      name: offerId
+      description: ID объявления
+      in: path
+      example: 12
     X-Token:
       name: "X-Token"
       description: Сессионный токен

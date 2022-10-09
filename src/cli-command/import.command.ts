@@ -41,10 +41,7 @@ class ImportCommand implements ICLICommand {
   }
 
   private async saveOffer(offer: IOfferParsed): Promise<void> {
-    const city = await this.cityService.findByNameOrCreate(
-      offer.city,
-      offer.city.name,
-    );
+    const city = await this.cityService.findByNameOrCreate(offer.city);
 
     const user = await this.userService.findOrCreate(
       {
@@ -57,6 +54,7 @@ class ImportCommand implements ICLICommand {
     await this.offerService.create({
       ...offer,
       cityId: city.id,
+      cityName: city.name,
       hostId: user.id,
     });
   }

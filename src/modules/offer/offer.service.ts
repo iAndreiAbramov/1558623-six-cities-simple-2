@@ -32,14 +32,13 @@ export default class OfferService implements IOfferService {
     return this.offerModel.findById(offerId);
   }
 
-  async deleteById(offerId: string): Promise<string | null> {
-    return this.offerModel.findOneAndDelete(
-      { offerId },
-      (doc: DocumentType<OfferEntity>) => doc.id,
-    );
+  async deleteById(offerId: string): Promise<null> {
+    return this.offerModel.findOneAndDelete({ _id: offerId });
   }
 
-  async incCommentsCount(offerId: string): Promise<DocumentType<OfferEntity> | null> {
+  async incCommentsCount(
+    offerId: string,
+  ): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel.findByIdAndUpdate(
       offerId,
       {

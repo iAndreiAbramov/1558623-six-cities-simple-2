@@ -7,7 +7,7 @@ import { StatusCodes } from 'http-status-codes';
 
 @injectable()
 export default abstract class Controller implements IController {
-  readonly _router: Router;
+  private readonly _router: Router;
 
   constructor(protected readonly logger: ILoggerService) {
     this._router = Router();
@@ -28,15 +28,19 @@ export default abstract class Controller implements IController {
     res.type('application/json').status(statusCode).json(data);
   }
 
-  public ok<T>(res: Response, data: T) {
+  public sendOk<T>(res: Response, data: T) {
     this.send(res, StatusCodes.OK, data);
   }
 
-  public create<T>(res: Response, data: T) {
+  public sendCreated<T>(res: Response, data: T) {
     this.send(res, StatusCodes.CREATED, data);
   }
 
-  public noContent<T>(res: Response, data: T) {
+  public sendNoContent<T>(res: Response, data: T) {
     this.send(res, StatusCodes.NO_CONTENT, data);
+  }
+
+  public sendNotFound(res: Response) {
+    res.status(StatusCodes.NOT_FOUND);
   }
 }

@@ -16,9 +16,16 @@ import { ICityService } from './modules/city/city.types';
 import { UserEntity, UserModel } from './modules/user/user.entity.js';
 import { CityEntity, CityModel } from './modules/city/city.entity.js';
 import { OfferEntity, OfferModel } from './modules/offer/offer.entity.js';
-import { CommentEntity, CommentModel } from './modules/comments/comment.entity';
-import CommentService from './modules/comments/comment.service';
+import {
+  CommentEntity,
+  CommentModel,
+} from './modules/comments/comment.entity.js';
+import CommentService from './modules/comments/comment.service.js';
 import { ICommentService } from './modules/comments/comment.types';
+import OfferController from './modules/offer/offer.controller.js';
+import { IController } from './types/controller.types';
+import { IOfferService } from './modules/offer/offer.types';
+import OfferService from './modules/offer/offer.service.js';
 
 const applicationContainer = new Container();
 applicationContainer
@@ -48,10 +55,19 @@ applicationContainer.bind<ICityService>(Component.ICityService).to(CityService);
 applicationContainer
   .bind<types.ModelType<OfferEntity>>(Component.OfferModel)
   .toConstantValue(OfferModel);
-applicationContainer.bind<ICommentService>(Component.ICommentService).to(CommentService);
+applicationContainer
+  .bind<IOfferService>(Component.IOfferService)
+  .to(OfferService);
+applicationContainer
+  .bind<ICommentService>(Component.ICommentService)
+  .to(CommentService);
 applicationContainer
   .bind<types.ModelType<CommentEntity>>(Component.CommentModel)
   .toConstantValue(CommentModel);
+applicationContainer
+  .bind<IController>(Component.OfferController)
+  .to(OfferController)
+  .inSingletonScope();
 
 const app = applicationContainer.get<Application>(Component.Application);
 await app.init();

@@ -5,6 +5,7 @@ import { Component } from '../types/component.types.js';
 import { IDbClient } from '../common/db-client/db-client.types';
 import { getDbConnectionURI } from '../utils/db.utils.js';
 import express, { Express } from 'express';
+import { IController } from '../types/controller.types';
 
 @injectable()
 export default class Application {
@@ -14,8 +15,17 @@ export default class Application {
     @inject(Component.ILoggerService) private logger: ILoggerService,
     @inject(Component.IConfigService) private appConfig: IConfigService,
     @inject(Component.IDbClient) private dbClient: IDbClient,
+    @inject(Component.OfferController) private offerController: IController,
   ) {
     this.app = express();
+  }
+
+  private initMiddlewares() {
+    this.app.use(express.json());
+  }
+
+  private initRoutes() {
+    this.app.use('/offer', this.offerController.router);
   }
 
   async init(): Promise<void> {
@@ -29,6 +39,9 @@ export default class Application {
         dbName: this.appConfig.get('DB_NAME'),
       }),
     );
+
+    this.initMiddlewares();
+    this.initRoutes();
 
     const port = this.appConfig.get('PORT');
     this.app.listen(port);

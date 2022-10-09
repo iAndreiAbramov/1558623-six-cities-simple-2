@@ -4,7 +4,6 @@ import { Good } from '../../../types/good.types';
 export default class CreateOfferDto {
   title!: string;
   description!: string;
-  cityId!: string;
   previewImage!: string;
   photos!: string[];
   isPremium!: boolean;
@@ -14,6 +13,8 @@ export default class CreateOfferDto {
   guestsNumber!: number;
   price!: number;
   goods!: Good[];
-  hostId!: string;
-  coordinates!: number[];
+  city!: string;
+  cityName!: string;
+  coordinates?: number[];
+  host!: string;
 }

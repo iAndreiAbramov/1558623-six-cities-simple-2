@@ -8,6 +8,8 @@ import { IOfferService } from './offer.types';
 import UpdateOfferDto from './dto/update-offer.dto';
 import CreateOfferDto from './dto/create-offer.dto';
 import { ICityService } from '../city/city.types';
+import { fillDTO } from '../../utils/common.utils.js';
+import OfferResponse from './offer.response.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -66,7 +68,7 @@ export default class OfferController extends Controller {
     let offer = await this.offerService.findById(offerId);
     if (offer) {
       offer = await offer.populate(['host', 'city']);
-      return this.sendOk(res, offer);
+      return this.sendOk(res, fillDTO(OfferResponse, offer));
     }
 
     return this.sendNotFound(res);

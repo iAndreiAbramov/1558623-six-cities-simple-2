@@ -10,6 +10,7 @@ import CreateOfferDto from './dto/create-offer.dto';
 import { ICityService } from '../city/city.types';
 import { fillDTO } from '../../utils/common.utils.js';
 import OfferResponse from './offer.response.js';
+import { ResponseGroup } from '../../types/ResponseGroup.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -60,7 +61,10 @@ export default class OfferController extends Controller {
     });
 
     newOffer = await newOffer.populate(['host', 'city']);
-    this.sendCreated(res, newOffer);
+    this.sendCreated(
+      res,
+      fillDTO(OfferResponse, newOffer, [ResponseGroup.OfferDetails]),
+    );
   }
 
   async getOfferDetails(req: Request, res: Response) {
@@ -68,7 +72,10 @@ export default class OfferController extends Controller {
     let offer = await this.offerService.findById(offerId);
     if (offer) {
       offer = await offer.populate(['host', 'city']);
-      return this.sendOk(res, fillDTO(OfferResponse, offer));
+      return this.sendOk(
+        res,
+        fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
+      );
     }
 
     return this.sendNotFound(res);
@@ -78,8 +85,16 @@ export default class OfferController extends Controller {
     req: Request<unknown, unknown, UpdateOfferDto>,
     res: Response,
   ) {
-    const offer = await this.offerService.update(req.body);
-    this.sendOk(res, offer);
+    let offer = await this.offerService.update(req.body);
+    if (offer) {
+      offer = await offer.populate(['host', 'city']);
+      this.sendOk(
+        res,
+        fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
+      );
+    }
+
+    return this.sendNotFound(res);
   }
 
   async deleteOffer(req: Request, res: Response) {

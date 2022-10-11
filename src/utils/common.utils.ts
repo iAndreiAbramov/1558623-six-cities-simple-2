@@ -5,6 +5,7 @@ import {
 import dayjs from 'dayjs';
 import * as crypto from 'crypto';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
+import { ResponseGroup } from '../types/ResponseGroup.js';
 
 export const getRandomInteger = (min: number, max: number): number => {
   let startValue = Math.ceil(Math.min(min, max));
@@ -61,5 +62,12 @@ export const getErrorMessage = (error: unknown): string =>
 export const createSHA256 = (password: string, salt: string) =>
   crypto.createHmac('sha256', salt).update(password).digest('hex');
 
-export const fillDTO = <T, V>(dto: ClassConstructor<T>, plainObject: V) =>
-  plainToInstance(dto, plainObject, { excludeExtraneousValues: true });
+export const fillDTO = <T, V>(
+  dto: ClassConstructor<T>,
+  plainObject: V,
+  groups?: ResponseGroup[],
+) =>
+    plainToInstance(dto, plainObject, {
+      excludeExtraneousValues: true,
+      groups,
+    });

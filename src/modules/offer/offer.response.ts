@@ -1,12 +1,13 @@
 import { Expose, Type } from 'class-transformer';
 import CityResponse from '../city/city.response.js';
 import UserResponse from '../user/user.response.js';
+import { ResponseGroup } from '../../types/ResponseGroup.js';
 
 export default class OfferResponse {
   @Expose()
   title!: string;
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferDetails] })
   description!: string;
 
   @Expose()
@@ -16,7 +17,7 @@ export default class OfferResponse {
   @Expose()
   previewImage!: string;
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferDetails] })
   photos!: string[];
 
   @Expose()
@@ -28,22 +29,22 @@ export default class OfferResponse {
   @Expose()
   type!: string;
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferDetails] })
   roomsNumber!: number;
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferDetails] })
   guestsNumber!: number;
 
   @Expose()
   price!: number;
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferDetails] })
   goods!: string[];
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferDetails] })
   @Type(() => UserResponse)
   host!: UserResponse;
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferDetails] })
   coordinates!: string[];
 }

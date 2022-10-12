@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { ILoggerService } from '../common/logger/logger.types.js';
-import { IConfigService } from '../common/app-config/app-config.types.js';
+import { IConfigService } from '../common/app-config/config-service.types';
 import { Component } from '../types/component.types.js';
 import { IDbClient } from '../common/db-client/db-client.types';
 import { getDbConnectionURI } from '../utils/db.utils.js';
@@ -17,6 +17,7 @@ export default class Application {
     @inject(Component.IConfigService) private appConfig: IConfigService,
     @inject(Component.IDbClient) private dbClient: IDbClient,
     @inject(Component.OfferController) private offerController: IController,
+    @inject(Component.UserController) private userController: IController,
     @inject(Component.IExceptionFilter)
     private exceptionFilter: IExceptionFilter,
   ) {
@@ -29,6 +30,7 @@ export default class Application {
 
   private initRoutes() {
     this.app.use('/offers', this.offerController.router);
+    this.app.use('/user', this.userController.router);
   }
 
   private initExceptionFilters() {

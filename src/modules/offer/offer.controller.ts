@@ -71,7 +71,7 @@ export default class OfferController extends Controller {
       throw new HttpError({
         httpCode: StatusCodes.BAD_REQUEST,
         message: `Invalid city name: '${req.body.cityName}'`,
-        detail: `${req.body.cityName}`,
+        detail: 'OfferController',
       });
     }
 
@@ -101,7 +101,7 @@ export default class OfferController extends Controller {
       throw new HttpError({
         httpCode: StatusCodes.NOT_FOUND,
         message: `Offer with id '${offerId}' does not exist`,
-        detail: `${offerId}`,
+        detail: 'OfferController',
       });
     }
   }
@@ -120,7 +120,7 @@ export default class OfferController extends Controller {
       throw new HttpError({
         httpCode: StatusCodes.NOT_FOUND,
         message: `Offer with id '${req.body.offerId}' does not exist`,
-        detail: `${req.body.offerId}`,
+        detail: 'OfferController',
       });
     }
   }
@@ -132,7 +132,7 @@ export default class OfferController extends Controller {
       throw new HttpError({
         httpCode: StatusCodes.NOT_FOUND,
         message: `Offer with id '${offerId}' does not exist`,
-        detail: `${offerId}`,
+        detail: 'OfferController',
       });
     }
     this.sendNoContent(res, result);

@@ -1,10 +1,10 @@
 import convict from 'convict';
 import validator from 'convict-format-with-validator';
-import { TConfigSchema } from './app-config.types';
+import { TConfigSchema } from './config-service.types';
 
 convict.addFormats(validator);
 
-export const appConfigSchema = convict<TConfigSchema>({
+export const configServiceSchema = convict<TConfigSchema>({
   PORT: {
     doc: 'Port for incoming connection',
     format: 'port',

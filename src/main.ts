@@ -8,7 +8,7 @@ import ConfigService from './common/app-config/config.service.js';
 import UserService from './modules/user/user.service.js';
 import CityService from './modules/city/city.service.js';
 import DbClientService from './common/db-client/db-client.service.js';
-import { IConfigService } from './common/app-config/app-config.types.js';
+import { IConfigService } from './common/app-config/config-service.types';
 import { ILoggerService } from './common/logger/logger.types.js';
 import { IDbClient } from './common/db-client/db-client.types';
 import { IUserService } from './modules/user/user.types';
@@ -28,6 +28,7 @@ import { IOfferService } from './modules/offer/offer.types';
 import OfferService from './modules/offer/offer.service.js';
 import ExceptionFilter from './common/errors/exception-filter.js';
 import { IExceptionFilter } from './common/errors/exception-filter.types';
+import UserController from './modules/user/user.controller.js';
 
 const applicationContainer = new Container();
 applicationContainer
@@ -69,6 +70,10 @@ applicationContainer
 applicationContainer
   .bind<IController>(Component.OfferController)
   .to(OfferController)
+  .inSingletonScope();
+applicationContainer
+  .bind<IController>(Component.UserController)
+  .to(UserController)
   .inSingletonScope();
 applicationContainer
   .bind<IExceptionFilter>(Component.IExceptionFilter)

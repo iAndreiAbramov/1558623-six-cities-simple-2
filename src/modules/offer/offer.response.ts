@@ -5,6 +5,9 @@ import { ResponseGroup } from '../../types/ResponseGroup.js';
 
 export default class OfferResponse {
   @Expose()
+  id!: string;
+
+  @Expose()
   title!: string;
 
   @Expose({ groups: [ResponseGroup.OfferDetails] })

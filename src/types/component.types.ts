@@ -11,5 +11,6 @@ export const Component = {
   IOfferService: Symbol.for('OfferService'),
   CommentModel: Symbol.for('CommentModel'),
   ICommentService: Symbol.for('CommentService'),
-  OfferController: Symbol.for('OfferController')
+  OfferController: Symbol.for('OfferController'),
+  IExceptionFilter: Symbol.for('ExceptionFilter')
 } as const;

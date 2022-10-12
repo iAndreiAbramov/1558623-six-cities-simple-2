@@ -30,7 +30,7 @@ export default class OfferService implements IOfferService {
 
   async update(dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
-      .findOneAndUpdate({ id: dto.offerId }, dto, {
+      .findByIdAndUpdate(dto.offerId, dto, {
         new: true,
       })
       .populate(['host', 'city']);

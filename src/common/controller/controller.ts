@@ -4,6 +4,7 @@ import { Response, Router } from 'express';
 import { ILoggerService } from '../logger/logger.types';
 import { IRoute } from '../../types/router.types';
 import { StatusCodes } from 'http-status-codes';
+import expressAsyncHandler from 'express-async-handler';
 
 @injectable()
 export default abstract class Controller implements IController {
@@ -18,7 +19,7 @@ export default abstract class Controller implements IController {
   }
 
   public addRoute(route: IRoute) {
-    this._router[route.method](route.path, route.handler.bind(this));
+    this._router[route.method](route.path, expressAsyncHandler(route.handler.bind(this)));
     this.logger.info(
       `Route registered: ${route.method.toUpperCase()} ${route.path}`,
     );

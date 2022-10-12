@@ -6,6 +6,7 @@ import { IDbClient } from '../common/db-client/db-client.types';
 import { getDbConnectionURI } from '../utils/db.utils.js';
 import express, { Express } from 'express';
 import { IController } from '../types/controller.types';
+import { IExceptionFilter } from '../common/errors/exception-filter.types';
 
 @injectable()
 export default class Application {
@@ -16,6 +17,8 @@ export default class Application {
     @inject(Component.IConfigService) private appConfig: IConfigService,
     @inject(Component.IDbClient) private dbClient: IDbClient,
     @inject(Component.OfferController) private offerController: IController,
+    @inject(Component.IExceptionFilter)
+    private exceptionFilter: IExceptionFilter,
   ) {
     this.app = express();
   }
@@ -26,6 +29,10 @@ export default class Application {
 
   private initRoutes() {
     this.app.use('/offers', this.offerController.router);
+  }
+
+  private initExceptionFilters() {
+    this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
   }
 
   async init(): Promise<void> {
@@ -42,6 +49,7 @@ export default class Application {
 
     this.initMiddlewares();
     this.initRoutes();
+    this.initExceptionFilters();
 
     const port = this.appConfig.get('PORT');
     this.app.listen(port);

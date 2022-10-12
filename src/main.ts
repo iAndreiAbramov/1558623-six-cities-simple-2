@@ -26,6 +26,8 @@ import OfferController from './modules/offer/offer.controller.js';
 import { IController } from './types/controller.types';
 import { IOfferService } from './modules/offer/offer.types';
 import OfferService from './modules/offer/offer.service.js';
+import ExceptionFilter from './common/errors/exception-filter.js';
+import { IExceptionFilter } from './common/errors/exception-filter.types';
 
 const applicationContainer = new Container();
 applicationContainer
@@ -68,6 +70,9 @@ applicationContainer
   .bind<IController>(Component.OfferController)
   .to(OfferController)
   .inSingletonScope();
-
+applicationContainer
+  .bind<IExceptionFilter>(Component.IExceptionFilter)
+  .to(ExceptionFilter)
+  .inSingletonScope();
 const app = applicationContainer.get<Application>(Component.Application);
 await app.init();

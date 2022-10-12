@@ -44,13 +44,15 @@ export default class OfferService implements IOfferService {
     return this.offerModel.findOneAndDelete({ _id: offerId });
   }
 
-  async incCommentsCount(
+  async updateCommentsCountAndRating(
     offerId: string,
+    rating: number,
   ): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel.findByIdAndUpdate(
       offerId,
       {
         $inc: { commentCount: 1 },
+        rating,
       },
       { new: true },
     );

@@ -18,6 +18,7 @@ export default class Application {
     @inject(Component.IDbClient) private dbClient: IDbClient,
     @inject(Component.OfferController) private offerController: IController,
     @inject(Component.UserController) private userController: IController,
+    @inject(Component.CommentController) private commentController: IController,
     @inject(Component.IExceptionFilter)
     private exceptionFilter: IExceptionFilter,
   ) {
@@ -31,6 +32,7 @@ export default class Application {
   private initRoutes() {
     this.app.use('/offers', this.offerController.router);
     this.app.use('/user', this.userController.router);
+    this.app.use('/comment', this.commentController.router);
   }
 
   private initExceptionFilters() {

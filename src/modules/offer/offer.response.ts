@@ -27,9 +27,6 @@ export default class OfferResponse {
   isPremium!: boolean;
 
   @Expose()
-  rating!: number;
-
-  @Expose()
   type!: string;
 
   @Expose({ groups: [ResponseGroup.OfferDetails] })
@@ -53,4 +50,10 @@ export default class OfferResponse {
 
   @Expose()
   createdAt!: string;
+
+  @Expose()
+  commentCount!: number;
+
+  @Expose()
+  rating!: number;
 }

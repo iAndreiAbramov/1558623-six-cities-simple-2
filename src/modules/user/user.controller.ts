@@ -11,7 +11,7 @@ import HttpError from '../../common/errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
 import { fillDTO } from '../../utils/common.utils.js';
 import UserResponse from './user.response.js';
-import { LoginUserDto } from './dto/login-user.dto';
+import { LoginUserDto } from './dto/login-user.dto.js';
 
 @injectable()
 export default class UserController extends Controller {

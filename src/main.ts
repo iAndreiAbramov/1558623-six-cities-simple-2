@@ -29,6 +29,7 @@ import OfferService from './modules/offer/offer.service.js';
 import ExceptionFilter from './common/errors/exception-filter.js';
 import { IExceptionFilter } from './common/errors/exception-filter.types';
 import UserController from './modules/user/user.controller.js';
+import CommentController from './modules/comments/comment.controller.js';
 
 const applicationContainer = new Container();
 applicationContainer
@@ -75,6 +76,9 @@ applicationContainer
   .bind<IController>(Component.UserController)
   .to(UserController)
   .inSingletonScope();
+applicationContainer
+  .bind<IController>(Component.CommentController)
+  .to(CommentController);
 applicationContainer
   .bind<IExceptionFilter>(Component.IExceptionFilter)
   .to(ExceptionFilter)

@@ -6,7 +6,6 @@ import { ILoggerService } from '../../common/logger/logger.types';
 import { Component } from '../../types/component.types.js';
 import { CommentEntity } from './comment.entity.js';
 import CreateCommentDto from './dto/create-comment.dto.js';
-import GetCommentsDto from './dto/get-comments.dto.js';
 import { DEFAULT_COMMENTS_NUMBER } from '../../constants/common.constants.js';
 
 @injectable()
@@ -18,15 +17,17 @@ export default class CommentService implements ICommentService {
   ) {}
 
   async create(dto: CreateCommentDto): Promise<DocumentType<CommentEntity>> {
-    const newComment = await this.commentModel.create(dto);
+    let newComment = await this.commentModel.create(dto);
+    newComment = await newComment.populate('author');
     this.logger.info('New comment created');
     return newComment;
   }
 
-  async getList(dto: GetCommentsDto): Promise<DocumentType<CommentEntity>[]> {
+  async getList(offerId: string): Promise<DocumentType<CommentEntity>[]> {
     return this.commentModel
-      .find({ offerId: dto.offerId })
-      .limit(dto.commentsNumber || DEFAULT_COMMENTS_NUMBER);
+      .find({ offerId })
+      .populate('author')
+      .limit(DEFAULT_COMMENTS_NUMBER);
   }
 
   public async deleteByOfferId(offerId: string): Promise<number> {

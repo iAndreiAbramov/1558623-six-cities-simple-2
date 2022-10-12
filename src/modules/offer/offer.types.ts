@@ -15,7 +15,6 @@ export interface IOfferCreate {
   previewImage: string;
   photos: string[];
   isPremium: boolean;
-  rating: number;
   type: ApartmentType;
   roomsNumber: number;
   guestsNumber: number;
@@ -24,6 +23,8 @@ export interface IOfferCreate {
   host: Ref<UserEntity>;
   cityName: CityName;
   coordinates?: number[];
+  rating: number;
+  commentCount: number;
 }
 
 export interface IOfferService {
@@ -32,5 +33,8 @@ export interface IOfferService {
   findById: (id: string) => Promise<DocumentType<OfferEntity> | null>;
   deleteById: (offerId: string) => Promise<null>;
   getList: (offersNumber?: number) => Promise<DocumentType<OfferEntity>[]>;
-  incCommentsCount: (offerId: string) => Promise<DocumentType<OfferEntity> | null>;
+  updateCommentsCountAndRating: (
+    offerId: string,
+    rating: number,
+  ) => Promise<DocumentType<OfferEntity> | null>;
 }

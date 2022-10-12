@@ -52,7 +52,7 @@ export default class OfferController extends Controller {
     });
   }
 
-  async index(req: Request, res: Response) {
+  private async index(req: Request, res: Response) {
     const { offersNumber } = req.query as { offersNumber: string };
     const offersList = await this.offerService.getList(Number(offersNumber));
     if (!offersList) {
@@ -62,7 +62,7 @@ export default class OfferController extends Controller {
     return this.sendOk(res, fillDTO(OfferResponse, offersList));
   }
 
-  async createOffer(
+  private async createOffer(
     req: Request<unknown, unknown, CreateOfferDto>,
     res: Response,
   ) {
@@ -89,7 +89,7 @@ export default class OfferController extends Controller {
     );
   }
 
-  async getOfferDetails(req: Request, res: Response) {
+  private async getOfferDetails(req: Request, res: Response) {
     const { offerId } = req.params as { offerId: string };
     try {
       const offer = await this.offerService.findById(offerId);
@@ -106,7 +106,7 @@ export default class OfferController extends Controller {
     }
   }
 
-  async updateOffer(
+  private async updateOffer(
     req: Request<unknown, unknown, UpdateOfferDto>,
     res: Response,
   ) {
@@ -125,7 +125,7 @@ export default class OfferController extends Controller {
     }
   }
 
-  async deleteOffer(req: Request, res: Response) {
+  private async deleteOffer(req: Request, res: Response) {
     const { offerId } = req.params as { offerId: string };
     const result = await this.offerService.deleteById(offerId);
     if (!result) {

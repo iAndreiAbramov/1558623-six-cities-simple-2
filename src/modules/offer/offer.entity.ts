@@ -19,7 +19,10 @@ export interface OfferEntity extends defaultClasses.Base {}
     collection: 'Offers',
   },
 })
-export class OfferEntity extends defaultClasses.TimeStamps implements IOfferCreate {
+export class OfferEntity
+  extends defaultClasses.TimeStamps
+  implements IOfferCreate
+{
   @prop({ required: true })
   title!: string;
 
@@ -37,9 +40,6 @@ export class OfferEntity extends defaultClasses.TimeStamps implements IOfferCrea
 
   @prop({ required: true })
   isPremium!: boolean;
-
-  @prop({ required: true })
-  rating!: number;
 
   @prop({ enum: ApartmentType })
   type!: ApartmentType;
@@ -65,8 +65,11 @@ export class OfferEntity extends defaultClasses.TimeStamps implements IOfferCrea
   @prop({ required: false, type: Number })
   coordinates?: number[];
 
-  @prop({ required: false, type: Number })
-  commentCount = 0;
+  @prop({ required: false, default: 0, type: Number })
+  commentCount!: number;
+
+  @prop({ required: false, default: 0, type: Number })
+  rating!: number;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

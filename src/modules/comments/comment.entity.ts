@@ -32,7 +32,7 @@ export class CommentEntity
   rating!: number;
 
   @prop({ required: true, ref: UserEntity, _id: false })
-  authorId!: Ref<UserEntity>;
+  author!: Ref<UserEntity>;
 
   @prop({ required: true, ref: OfferEntity, _id: false })
   offerId!: Ref<OfferEntity>;

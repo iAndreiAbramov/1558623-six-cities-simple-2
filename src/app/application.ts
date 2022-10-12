@@ -25,7 +25,7 @@ export default class Application {
   }
 
   private initRoutes() {
-    this.app.use('/offer', this.offerController.router);
+    this.app.use('/offers', this.offerController.router);
   }
 
   async init(): Promise<void> {

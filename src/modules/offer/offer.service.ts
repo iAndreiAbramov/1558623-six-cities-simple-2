@@ -16,20 +16,28 @@ export default class OfferService implements IOfferService {
     private readonly offerModel: types.ModelType<OfferEntity>,
   ) {}
 
-  async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
-    const newOffer = await this.offerModel.create(dto);
-    this.logger.info(`New city with title ${dto.title} created`);
-    return newOffer;
+  async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+    let newOffer = await this.offerModel.create(dto);
+    if (newOffer) {
+      newOffer = await newOffer.populate(['host', 'city']);
+      this.logger.info(`New city with title ${dto.title} created`);
+      return newOffer;
+    }
+
+    this.logger.error(`Failed to create an offer ${dto.title}`);
+    return null;
   }
 
   async update(dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel.findOneAndUpdate({ id: dto.offerId }, dto, {
-      new: true,
-    });
+    return this.offerModel
+      .findOneAndUpdate({ id: dto.offerId }, dto, {
+        new: true,
+      })
+      .populate(['host', 'city']);
   }
 
   async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel.findById(offerId);
+    return this.offerModel.findById(offerId).populate(['host', 'city']);
   }
 
   async deleteById(offerId: string): Promise<null> {
@@ -50,17 +58,8 @@ export default class OfferService implements IOfferService {
 
   async getList(offersNumber?: number): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
-      .find({
-        id: 1,
-        title: 1,
-        type: 1,
-        rating: 1,
-        price: 1,
-        cityId: 1,
-        previewImage: 1,
-        isPremium: 1,
-      })
-      .populate('cityId')
+      .find()
+      .populate('city')
       .limit(offersNumber || DEFAULT_OFFERS_NUMBER);
   }
 }

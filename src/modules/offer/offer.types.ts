@@ -27,7 +27,7 @@ export interface IOfferCreate {
 }
 
 export interface IOfferService {
-  create: (dto: CreateOfferDto) => Promise<DocumentType<OfferEntity>>;
+  create: (dto: CreateOfferDto) => Promise<DocumentType<OfferEntity> | null>;
   update: (dto: UpdateOfferDto) => Promise<DocumentType<OfferEntity> | null>;
   findById: (id: string) => Promise<DocumentType<OfferEntity> | null>;
   deleteById: (offerId: string) => Promise<null>;

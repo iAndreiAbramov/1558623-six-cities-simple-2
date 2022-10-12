@@ -24,6 +24,11 @@ export default class OfferController extends Controller {
     this.logger.info('Registering routes for OfferController');
 
     this.addRoute({
+      path: '/:offersNumber',
+      method: HttpMethod.Get,
+      handler: this.index,
+    });
+    this.addRoute({
       path: '/create',
       method: HttpMethod.Post,
       handler: this.createOffer,
@@ -45,6 +50,16 @@ export default class OfferController extends Controller {
     });
   }
 
+  async index(req: Request, res: Response) {
+    const { offersNumber } = req.params as { offersNumber: string };
+    const offersList = await this.offerService.getList(Number(offersNumber));
+    if (!offersList) {
+      throw new Error('Failed to get offers');
+    }
+
+    return this.sendOk(res, fillDTO(OfferResponse, offersList));
+  }
+
   async createOffer(
     req: Request<unknown, unknown, CreateOfferDto>,
     res: Response,
@@ -55,13 +70,16 @@ export default class OfferController extends Controller {
       throw new Error('Invalid city name');
     }
 
-    let newOffer = await this.offerService.create({
+    const newOffer = await this.offerService.create({
       ...req.body,
       city: existingCity.id,
     });
+    // TODO: удалить после перехода на валидацию в middleware
+    if (!newOffer) {
+      throw new Error('Failed to create offer');
+    }
 
-    newOffer = await newOffer.populate(['host', 'city']);
-    this.sendCreated(
+    return this.sendCreated(
       res,
       fillDTO(OfferResponse, newOffer, [ResponseGroup.OfferDetails]),
     );
@@ -69,37 +87,41 @@ export default class OfferController extends Controller {
 
   async getOfferDetails(req: Request, res: Response) {
     const { offerId } = req.params as { offerId: string };
-    let offer = await this.offerService.findById(offerId);
-    if (offer) {
-      offer = await offer.populate(['host', 'city']);
-      return this.sendOk(
-        res,
-        fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
-      );
+    const offer = await this.offerService.findById(offerId);
+    // TODO: удалить после перехода на валидацию в middleware
+    if (!offer) {
+      throw new Error('Offer does not exist');
     }
 
-    return this.sendNotFound(res);
+    return this.sendOk(
+      res,
+      fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
+    );
   }
 
   async updateOffer(
     req: Request<unknown, unknown, UpdateOfferDto>,
     res: Response,
   ) {
-    let offer = await this.offerService.update(req.body);
-    if (offer) {
-      offer = await offer.populate(['host', 'city']);
-      this.sendOk(
-        res,
-        fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
-      );
+    const offer = await this.offerService.update(req.body);
+    // TODO: удалить после перехода на валидацию в middleware
+    if (!offer) {
+      throw new Error('Offer does not exist');
     }
 
-    return this.sendNotFound(res);
+    this.sendOk(
+      res,
+      fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
+    );
   }
 
   async deleteOffer(req: Request, res: Response) {
     const { offerId } = req.params as { offerId: string };
     const result = await this.offerService.deleteById(offerId);
+    // TODO: удалить после перехода на валидацию в middleware
+    if (!result) {
+      throw new Error('Offer not found');
+    }
     this.sendNoContent(res, result);
   }
 }

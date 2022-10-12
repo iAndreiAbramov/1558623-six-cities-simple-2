@@ -47,4 +47,7 @@ export default class OfferResponse {
 
   @Expose({ groups: [ResponseGroup.OfferDetails] })
   coordinates!: string[];
+
+  @Expose()
+  createdAt!: string;
 }

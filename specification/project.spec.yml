@@ -8,10 +8,8 @@ info:
     url: https://opensource.org/licenses/MIT
   version: 2.0.0
 tags:
-  - name: offer
-    description: Действия с одним объявлением
   - name: offers
-    description: Действия со списком объявлений
+    description: Действия с объявлениями
   - name: user
     description: Действия с пользователем
   - name: comment
@@ -20,10 +18,10 @@ tags:
     description: Действия со списком комментариев
 
 paths:
-  /offer/create:
+  /offers/create:
     post:
       tags:
-        - offer
+        - offers
       summary: Создание нового предложения
       description: Создает новое предложение об аренде, требуется авторизация
 
@@ -44,10 +42,10 @@ paths:
         401:
           $ref: '#/components/responses/UnAuthorized'
 
-  /offer/update/:offerId:
+  /offers/update/:offerId:
     patch:
       tags:
-        - offer
+        - offers
       summary: Редактирование предложения
       description: Редактирует предложение об аренде по id, требуется авторизация
 
@@ -66,10 +64,10 @@ paths:
         401:
           $ref: '#/components/responses/UnAuthorized'
 
-  /offer/details/:offerId:
+  /offers/details/:offerId:
     get:
       tags:
-        - offer
+        - offers
       summary: Подробная информация о предложении
       description: Подробная информация о предложении по id. Доступно всем пользователям.
 
@@ -86,10 +84,10 @@ paths:
         400:
           $ref: '#/components/responses/NotFound'
 
-  /offer/delete/:offerId:
+  /offers/delete/:offerId:
     delete:
       tags:
-        - offer
+        - offers
       summary: Удаление предложения
       description: Удаляет предложение об аренде по id, требуется авторизация
       parameters:

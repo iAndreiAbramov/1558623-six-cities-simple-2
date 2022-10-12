@@ -11,6 +11,8 @@ import { ICityService } from '../city/city.types';
 import { fillDTO } from '../../utils/common.utils.js';
 import OfferResponse from './offer.response.js';
 import { ResponseGroup } from '../../types/ResponseGroup.js';
+import HttpError from '../../common/errors/http-error.js';
+import { StatusCodes } from 'http-status-codes';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -24,7 +26,7 @@ export default class OfferController extends Controller {
     this.logger.info('Registering routes for OfferController');
 
     this.addRoute({
-      path: '/:offersNumber',
+      path: '/',
       method: HttpMethod.Get,
       handler: this.index,
     });
@@ -51,7 +53,7 @@ export default class OfferController extends Controller {
   }
 
   async index(req: Request, res: Response) {
-    const { offersNumber } = req.params as { offersNumber: string };
+    const { offersNumber } = req.query as { offersNumber: string };
     const offersList = await this.offerService.getList(Number(offersNumber));
     if (!offersList) {
       throw new Error('Failed to get offers');
@@ -64,22 +66,24 @@ export default class OfferController extends Controller {
     req: Request<unknown, unknown, CreateOfferDto>,
     res: Response,
   ) {
-    // TODO: удалить после перехода на валидацию в middleware
     const existingCity = await this.cityService.findByName(req.body.cityName);
     if (!existingCity) {
-      throw new Error('Invalid city name');
+      throw new HttpError({
+        httpCode: StatusCodes.BAD_REQUEST,
+        message: `Invalid city name: '${req.body.cityName}'`,
+        detail: `${req.body.cityName}`,
+      });
     }
 
     const newOffer = await this.offerService.create({
       ...req.body,
       city: existingCity.id,
     });
-    // TODO: удалить после перехода на валидацию в middleware
     if (!newOffer) {
       throw new Error('Failed to create offer');
     }
 
-    return this.sendCreated(
+    this.sendCreated(
       res,
       fillDTO(OfferResponse, newOffer, [ResponseGroup.OfferDetails]),
     );
@@ -87,40 +91,49 @@ export default class OfferController extends Controller {
 
   async getOfferDetails(req: Request, res: Response) {
     const { offerId } = req.params as { offerId: string };
-    const offer = await this.offerService.findById(offerId);
-    // TODO: удалить после перехода на валидацию в middleware
-    if (!offer) {
-      throw new Error('Offer does not exist');
+    try {
+      const offer = await this.offerService.findById(offerId);
+      this.sendOk(
+        res,
+        fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
+      );
+    } catch (error) {
+      throw new HttpError({
+        httpCode: StatusCodes.NOT_FOUND,
+        message: `Offer with id '${offerId}' does not exist`,
+        detail: `${offerId}`,
+      });
     }
-
-    return this.sendOk(
-      res,
-      fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
-    );
   }
 
   async updateOffer(
     req: Request<unknown, unknown, UpdateOfferDto>,
     res: Response,
   ) {
-    const offer = await this.offerService.update(req.body);
-    // TODO: удалить после перехода на валидацию в middleware
-    if (!offer) {
-      throw new Error('Offer does not exist');
+    try {
+      const offer = await this.offerService.update(req.body);
+      this.sendOk(
+        res,
+        fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
+      );
+    } catch {
+      throw new HttpError({
+        httpCode: StatusCodes.NOT_FOUND,
+        message: `Offer with id '${req.body.offerId}' does not exist`,
+        detail: `${req.body.offerId}`,
+      });
     }
-
-    this.sendOk(
-      res,
-      fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
-    );
   }
 
   async deleteOffer(req: Request, res: Response) {
     const { offerId } = req.params as { offerId: string };
     const result = await this.offerService.deleteById(offerId);
-    // TODO: удалить после перехода на валидацию в middleware
     if (!result) {
-      throw new Error('Offer not found');
+      throw new HttpError({
+        httpCode: StatusCodes.NOT_FOUND,
+        message: `Offer with id '${offerId}' does not exist`,
+        detail: `${offerId}`,
+      });
     }
     this.sendNoContent(res, result);
   }

@@ -71,3 +71,7 @@ export const fillDTO = <T, V>(
       excludeExtraneousValues: true,
       groups,
     });
+
+export const createErrorObject = (message: string) => ({
+  error: message,
+});

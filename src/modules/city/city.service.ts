@@ -4,7 +4,6 @@ import { ICityService } from './city.types';
 import { CityEntity } from './city.entity';
 import { Component } from '../../types/component.types.js';
 import CreateCityDto from './dto/create-city.dto';
-import { CityName } from '../../types/cities.types';
 import { ILoggerService } from '../../common/logger/logger.types';
 
 @injectable()
@@ -25,11 +24,14 @@ export default class CityService implements ICityService {
     return this.cityModel.findOne({ name });
   }
 
+  async getIdByName(name: string): Promise<string | null> {
+    return this.cityModel.findOne({ name }).then((city) => city?.id);
+  }
+
   async findByNameOrCreate(
     dto: CreateCityDto,
-    name: CityName,
   ): Promise<DocumentType<CityEntity>> {
-    const existingCity = await this.findByName(name);
+    const existingCity = await this.findByName(dto.name);
     return existingCity ? existingCity : this.create(dto);
   }
 }

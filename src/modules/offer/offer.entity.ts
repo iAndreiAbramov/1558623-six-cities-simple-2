@@ -6,8 +6,9 @@ import typegoose, {
 import { CityEntity } from '../city/city.entity.js';
 import { ApartmentType } from '../../types/apartment.types.js';
 import { Good } from '../../types/good.types.js';
-import { IOffer } from './offer.types';
+import { IOfferCreate } from './offer.types';
 import { UserEntity } from '../user/user.entity.js';
+import { CityName } from '../../types/cities.types.js';
 
 const { prop, modelOptions } = typegoose;
 
@@ -18,7 +19,10 @@ export interface OfferEntity extends defaultClasses.Base {}
     collection: 'Offers',
   },
 })
-export class OfferEntity extends defaultClasses.TimeStamps implements IOffer {
+export class OfferEntity
+  extends defaultClasses.TimeStamps
+  implements IOfferCreate
+{
   @prop({ required: true })
   title!: string;
 
@@ -26,7 +30,7 @@ export class OfferEntity extends defaultClasses.TimeStamps implements IOffer {
   description!: string;
 
   @prop({ required: true, ref: CityEntity, _id: false })
-  cityId!: Ref<CityEntity>;
+  city!: Ref<CityEntity>;
 
   @prop({ required: true })
   previewImage!: string;
@@ -36,9 +40,6 @@ export class OfferEntity extends defaultClasses.TimeStamps implements IOffer {
 
   @prop({ required: true })
   isPremium!: boolean;
-
-  @prop({ required: true })
-  rating!: number;
 
   @prop({ enum: ApartmentType })
   type!: ApartmentType;
@@ -56,13 +57,19 @@ export class OfferEntity extends defaultClasses.TimeStamps implements IOffer {
   goods!: Good[];
 
   @prop({ required: true, ref: UserEntity, _id: false })
-  hostId!: Ref<UserEntity>;
+  host!: Ref<UserEntity>;
 
-  @prop({ required: true, type: Number })
-  coordinates!: number[];
+  @prop({ required: true, enum: CityName })
+  cityName!: CityName;
 
   @prop({ required: false, type: Number })
-  commentCount = 0;
+  coordinates?: number[];
+
+  @prop({ required: false, default: 0, type: Number })
+  commentCount!: number;
+
+  @prop({ required: false, default: 0, type: Number })
+  rating!: number;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

@@ -1,8 +1,8 @@
 import { config } from 'dotenv';
 import { inject, injectable } from 'inversify';
-import { IConfigService, TConfigSchema } from './app-config.types.js';
+import { IConfigService, TConfigSchema } from './config-service.types';
 import { ILoggerService } from '../logger/logger.types.js';
-import { appConfigSchema } from './app-config.schema.js';
+import { configServiceSchema } from './config-service.schema.js';
 import { Component } from '../../types/component.types.js';
 
 @injectable()
@@ -21,10 +21,10 @@ export default class ConfigService implements IConfigService {
       );
     }
 
-    appConfigSchema.load({});
-    appConfigSchema.validate({ allowed: 'strict', output: this.logger.info });
+    configServiceSchema.load({});
+    configServiceSchema.validate({ allowed: 'strict', output: this.logger.info });
 
-    this.config = appConfigSchema.getProperties();
+    this.config = configServiceSchema.getProperties();
 
     this.logger.info('.env file successfully parsed!');
   }

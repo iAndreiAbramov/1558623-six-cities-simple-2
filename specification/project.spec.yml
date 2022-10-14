@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.0.1
 info:
   title: API сервер для учебного-проекта «Шесть городов».
   description: |-
@@ -8,23 +8,18 @@ info:
     url: https://opensource.org/licenses/MIT
   version: 2.0.0
 tags:
-  - name: offer
-    description: Действия с одним объявлением
   - name: offers
-    description: Действия со списком объявлений
+    description: Действия с объявлениями
   - name: user
     description: Действия с пользователем
   - name: comment
-    description: Действия с отдельным комментарием
-  - name: comments
-    description: Действия со списком комментариев
-
+    description: Действия с комментариями
 
 paths:
-  /offer:
+  /offers/create:
     post:
       tags:
-        - offer
+        - offers
       summary: Создание нового предложения
       description: Создает новое предложение об аренде, требуется авторизация
 
@@ -45,18 +40,15 @@ paths:
         401:
           $ref: '#/components/responses/UnAuthorized'
 
-    put:
+  /offers/update/:offerId:
+    patch:
       tags:
-        - offer
+        - offers
       summary: Редактирование предложения
       description: Редактирует предложение об аренде по id, требуется авторизация
 
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/offerUpdate'
+      parameters:
+        - $ref: '#/components/parameters/offerId'
 
       responses:
         200:
@@ -70,18 +62,15 @@ paths:
         401:
           $ref: '#/components/responses/UnAuthorized'
 
+  /offers/details/:offerId:
     get:
       tags:
-        - offer
+        - offers
       summary: Подробная информация о предложении
       description: Подробная информация о предложении по id. Доступно всем пользователям.
 
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/offerById"
+      parameters:
+        - $ref: '#/components/parameters/offerId'
 
       responses:
         200:
@@ -93,18 +82,14 @@ paths:
         400:
           $ref: '#/components/responses/NotFound'
 
+  /offers/delete/:offerId:
     delete:
       tags:
-        - offer
+        - offers
       summary: Удаление предложения
       description: Удаляет предложение об аренде по id, требуется авторизация
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/offerById"
-
+      parameters:
+        - $ref: '#/components/parameters/offerId'
       responses:
         201:
           description: Предложение удалено
@@ -133,7 +118,7 @@ paths:
                   $ref: "#/components/schemas/offerGetShort",
                 }
 
-  /comment:
+  /comment/add:
     post:
       tags:
         - comment
@@ -160,20 +145,15 @@ paths:
         401:
           $ref: "#/components/responses/UnAuthorized"
 
-  /comments:
+  /comment/list/:offerId:
     get:
       tags:
-        - comments
+        - comment
       summary: Список комментариев для предложения
       description: Список комментариев для предложения по id. Доступно всем пользователям.
 
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/commentByOfferId"
-
+      parameters:
+        - $ref: '#/components/parameters/offerId'
       responses:
         200:
           description: Комментарии получены
@@ -293,10 +273,15 @@ components:
 
   parameters:
     offersNumber:
-      name: offersNumber
-      description: Количество объявлений
+      name: 'offersNumber'
+      description: 'Количество объявлений'
       in: query
       example: 5
+    offerId:
+      name: 'offerId'
+      description: 'ID объявления'
+      in: path
+      example: "634718a6f2eb52da0cac0f19"
     X-Token:
       name: "X-Token"
       description: Сессионный токен
@@ -349,9 +334,10 @@ components:
           type: number
           example: 4.4
           required: true
-        authorEmail:
+        author:
           type: string
-          example: "fake1@fake.com"
+          description: 'id автора комментария'
+          example: "6346ba0dbace374122d48415"
           required: true
 
     commentGet:
@@ -368,17 +354,6 @@ components:
           example: "01.01.2022"
         author:
           $ref: "#/components/schemas/userGet"
-
-    commentByOfferId:
-      type: object
-      properties:
-        offerId:
-          type: string
-          example: "633834d7ce3a94d52ba2dcee"
-        commentsNumber:
-          required: false
-          type: number
-          example: 25
 
     userGet:
       type: object

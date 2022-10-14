@@ -6,29 +6,35 @@ import { UserEntity } from '../user/user.entity';
 import CreateOfferDto from './dto/create-offer.dto';
 import { OfferEntity } from './offer.entity';
 import UpdateOfferDto from './dto/update-offer.dto';
+import { CityName } from '../../types/cities.types';
 
-export interface IOffer {
+export interface IOfferCreate {
   title: string;
   description: string;
-  cityId: Ref<CityEntity>;
+  city: Ref<CityEntity>;
   previewImage: string;
   photos: string[];
   isPremium: boolean;
-  rating: number;
   type: ApartmentType;
   roomsNumber: number;
   guestsNumber: number;
   price: number;
   goods: Good[];
-  hostId: Ref<UserEntity>;
-  coordinates: number[];
+  host: Ref<UserEntity>;
+  cityName: CityName;
+  coordinates?: number[];
+  rating: number;
+  commentCount: number;
 }
 
 export interface IOfferService {
-  create: (dto: CreateOfferDto) => Promise<DocumentType<OfferEntity>>;
+  create: (dto: CreateOfferDto) => Promise<DocumentType<OfferEntity> | null>;
   update: (dto: UpdateOfferDto) => Promise<DocumentType<OfferEntity> | null>;
   findById: (id: string) => Promise<DocumentType<OfferEntity> | null>;
-  deleteById: (offerId: string) => Promise<string | null>;
+  deleteById: (offerId: string) => Promise<null>;
   getList: (offersNumber?: number) => Promise<DocumentType<OfferEntity>[]>;
-  incCommentsCount: (offerId: string) => Promise<DocumentType<OfferEntity> | null>;
+  updateCommentsCountAndRating: (
+    offerId: string,
+    rating: number,
+  ) => Promise<DocumentType<OfferEntity> | null>;
 }

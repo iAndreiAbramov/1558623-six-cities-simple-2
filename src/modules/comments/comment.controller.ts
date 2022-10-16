@@ -1,17 +1,18 @@
 import Controller from '../../common/controller/controller.js';
-import {inject, injectable} from 'inversify';
-import {Component} from '../../types/component.types.js';
-import {ILoggerService} from '../../common/logger/logger.types';
-import {ICommentService} from './comment.types';
-import {Request, Response} from 'express';
+import { inject, injectable } from 'inversify';
+import { Component } from '../../types/component.types.js';
+import { ILoggerService } from '../../common/logger/logger.types';
+import { ICommentService } from './comment.types';
+import { Request, Response } from 'express';
 import CreateCommentDto from './dto/create-comment.dto.js';
-import {fillDTO} from '../../utils/common.utils.js';
+import { fillDTO } from '../../utils/common.utils.js';
 import CommentResponse from './comment.response.js';
-import {HttpMethod} from '../../types/router.types.js';
-import {IOfferService} from '../offer/offer.types';
+import { HttpMethod } from '../../types/router.types.js';
+import { IOfferService } from '../offer/offer.types';
 import HttpError from '../../common/errors/http-error.js';
-import {StatusCodes} from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectId.middleware.js';
+import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 
 @injectable()
 export default class CommentController extends Controller {
@@ -26,6 +27,7 @@ export default class CommentController extends Controller {
       path: '/add',
       method: HttpMethod.Post,
       handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateCommentDto)],
     });
     this.addRoute({
       path: '/list/:offerId',
@@ -36,7 +38,7 @@ export default class CommentController extends Controller {
   }
 
   private async getList(req: Request, res: Response) {
-    const {offerId} = req.params as { offerId: string };
+    const { offerId } = req.params as { offerId: string };
     try {
       const comments = await this.commentService.getList(offerId);
       this.sendOk(res, fillDTO(CommentResponse, comments));

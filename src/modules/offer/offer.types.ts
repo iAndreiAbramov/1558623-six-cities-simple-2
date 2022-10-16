@@ -11,7 +11,7 @@ import { CityName } from '../../types/cities.types';
 export interface IOfferCreate {
   title: string;
   description: string;
-  city: Ref<CityEntity>;
+  cityId: Ref<CityEntity>;
   previewImage: string;
   photos: string[];
   isPremium: boolean;
@@ -20,10 +20,10 @@ export interface IOfferCreate {
   guestsNumber: number;
   price: number;
   goods: Good[];
-  host: Ref<UserEntity>;
+  hostId: Ref<UserEntity>;
   cityName: CityName;
   coordinates?: number[];
-  rating: number;
+  rating?: number;
   commentCount: number;
 }
 

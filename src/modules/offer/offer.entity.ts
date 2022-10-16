@@ -30,7 +30,7 @@ export class OfferEntity
   description!: string;
 
   @prop({ required: true, ref: CityEntity, _id: false })
-  city!: Ref<CityEntity>;
+  cityId!: Ref<CityEntity>;
 
   @prop({ required: true })
   previewImage!: string;
@@ -57,7 +57,7 @@ export class OfferEntity
   goods!: Good[];
 
   @prop({ required: true, ref: UserEntity, _id: false })
-  host!: Ref<UserEntity>;
+  hostId!: Ref<UserEntity>;
 
   @prop({ required: true, enum: CityName })
   cityName!: CityName;

@@ -5,8 +5,8 @@ import { Component } from '../../types/component.types.js';
 import { HttpMethod } from '../../types/router.types.js';
 import { Request, Response } from 'express';
 import { IOfferService } from './offer.types';
-import UpdateOfferDto from './dto/update-offer.dto';
-import CreateOfferDto from './dto/create-offer.dto';
+import UpdateOfferDto from './dto/update-offer.dto.js';
+import CreateOfferDto from './dto/create-offer.dto.js';
 import { ICityService } from '../city/city.types';
 import { fillDTO } from '../../utils/common.utils.js';
 import OfferResponse from './offer.response.js';
@@ -14,6 +14,7 @@ import { ResponseGroup } from '../../types/ResponseGroup.js';
 import HttpError from '../../common/errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
 import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectId.middleware.js';
+import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -35,11 +36,13 @@ export default class OfferController extends Controller {
       path: '/create',
       method: HttpMethod.Post,
       handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)],
     });
     this.addRoute({
       path: '/update',
       method: HttpMethod.Patch,
       handler: this.update,
+      middlewares: [new ValidateDtoMiddleware(UpdateOfferDto)],
     });
     this.addRoute({
       path: '/details/:offerId',
@@ -80,7 +83,7 @@ export default class OfferController extends Controller {
 
     const newOffer = await this.offerService.create({
       ...req.body,
-      city: existingCity.id,
+      cityId: existingCity.id,
     });
     if (!newOffer) {
       throw new Error('Failed to create offer');

@@ -26,7 +26,7 @@ export default class UserController extends Controller {
     this.addRoute({
       path: '/create',
       method: HttpMethod.Post,
-      handler: this.createUser,
+      handler: this.create,
     });
     this.addRoute({
       path: '/login',
@@ -35,7 +35,7 @@ export default class UserController extends Controller {
     });
   }
 
-  private async createUser(
+  private async create(
     req: Request<unknown, unknown, CreateUserDto>,
     res: Response,
   ) {

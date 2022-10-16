@@ -13,6 +13,7 @@ import OfferResponse from './offer.response.js';
 import { ResponseGroup } from '../../types/ResponseGroup.js';
 import HttpError from '../../common/errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
+import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectId.middleware.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -33,22 +34,24 @@ export default class OfferController extends Controller {
     this.addRoute({
       path: '/create',
       method: HttpMethod.Post,
-      handler: this.createOffer,
+      handler: this.create,
     });
     this.addRoute({
       path: '/update',
       method: HttpMethod.Patch,
-      handler: this.updateOffer,
+      handler: this.update,
     });
     this.addRoute({
       path: '/details/:offerId',
       method: HttpMethod.Get,
-      handler: this.getOfferDetails,
+      handler: this.getDetails,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')],
     });
     this.addRoute({
       path: '/delete/:offerId',
       method: HttpMethod.Delete,
-      handler: this.deleteOffer,
+      handler: this.delete,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')],
     });
   }
 
@@ -62,7 +65,7 @@ export default class OfferController extends Controller {
     return this.sendOk(res, fillDTO(OfferResponse, offersList));
   }
 
-  private async createOffer(
+  private async create(
     req: Request<unknown, unknown, CreateOfferDto>,
     res: Response,
   ) {
@@ -89,7 +92,7 @@ export default class OfferController extends Controller {
     );
   }
 
-  private async getOfferDetails(req: Request, res: Response) {
+  private async getDetails(req: Request, res: Response) {
     const { offerId } = req.params as { offerId: string };
     try {
       const offer = await this.offerService.findById(offerId);
@@ -106,7 +109,7 @@ export default class OfferController extends Controller {
     }
   }
 
-  private async updateOffer(
+  private async update(
     req: Request<unknown, unknown, UpdateOfferDto>,
     res: Response,
   ) {
@@ -125,7 +128,7 @@ export default class OfferController extends Controller {
     }
   }
 
-  private async deleteOffer(req: Request, res: Response) {
+  private async delete(req: Request, res: Response) {
     const { offerId } = req.params as { offerId: string };
     const result = await this.offerService.deleteById(offerId);
     if (!result) {

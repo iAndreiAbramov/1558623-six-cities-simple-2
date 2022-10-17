@@ -19,7 +19,7 @@ export default class OfferService implements IOfferService {
   async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity> | null> {
     let newOffer = await this.offerModel.create(dto);
     if (newOffer) {
-      newOffer = await newOffer.populate(['host', 'city']);
+      newOffer = await newOffer.populate(['hostId', 'cityId']);
       this.logger.info(`New city with title ${dto.title} created`);
       return newOffer;
     }
@@ -33,11 +33,11 @@ export default class OfferService implements IOfferService {
       .findByIdAndUpdate(dto.offerId, dto, {
         new: true,
       })
-      .populate(['host', 'city']);
+      .populate(['hostId', 'cityId']);
   }
 
   async findById(offerId: string): Promise<DocumentType<OfferEntity> | null> {
-    return this.offerModel.findById(offerId).populate(['host', 'city']);
+    return this.offerModel.findById(offerId).populate(['hostId', 'cityId']);
   }
 
   async deleteById(offerId: string): Promise<null> {
@@ -61,7 +61,7 @@ export default class OfferService implements IOfferService {
   async getList(offersNumber?: number): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .find()
-      .populate('city')
+      .populate('cityId')
       .limit(offersNumber || DEFAULT_OFFERS_NUMBER);
   }
 }

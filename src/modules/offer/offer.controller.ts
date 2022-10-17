@@ -5,14 +5,16 @@ import { Component } from '../../types/component.types.js';
 import { HttpMethod } from '../../types/router.types.js';
 import { Request, Response } from 'express';
 import { IOfferService } from './offer.types';
-import UpdateOfferDto from './dto/update-offer.dto';
-import CreateOfferDto from './dto/create-offer.dto';
+import UpdateOfferDto from './dto/update-offer.dto.js';
+import CreateOfferDto from './dto/create-offer.dto.js';
 import { ICityService } from '../city/city.types';
 import { fillDTO } from '../../utils/common.utils.js';
 import OfferResponse from './offer.response.js';
 import { ResponseGroup } from '../../types/ResponseGroup.js';
 import HttpError from '../../common/errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
+import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectId.middleware.js';
+import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -33,22 +35,26 @@ export default class OfferController extends Controller {
     this.addRoute({
       path: '/create',
       method: HttpMethod.Post,
-      handler: this.createOffer,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)],
     });
     this.addRoute({
       path: '/update',
       method: HttpMethod.Patch,
-      handler: this.updateOffer,
+      handler: this.update,
+      middlewares: [new ValidateDtoMiddleware(UpdateOfferDto)],
     });
     this.addRoute({
       path: '/details/:offerId',
       method: HttpMethod.Get,
-      handler: this.getOfferDetails,
+      handler: this.getDetails,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')],
     });
     this.addRoute({
       path: '/delete/:offerId',
       method: HttpMethod.Delete,
-      handler: this.deleteOffer,
+      handler: this.delete,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')],
     });
   }
 
@@ -62,7 +68,7 @@ export default class OfferController extends Controller {
     return this.sendOk(res, fillDTO(OfferResponse, offersList));
   }
 
-  private async createOffer(
+  private async create(
     req: Request<unknown, unknown, CreateOfferDto>,
     res: Response,
   ) {
@@ -77,7 +83,7 @@ export default class OfferController extends Controller {
 
     const newOffer = await this.offerService.create({
       ...req.body,
-      city: existingCity.id,
+      cityId: existingCity.id,
     });
     if (!newOffer) {
       throw new Error('Failed to create offer');
@@ -89,7 +95,7 @@ export default class OfferController extends Controller {
     );
   }
 
-  private async getOfferDetails(req: Request, res: Response) {
+  private async getDetails(req: Request, res: Response) {
     const { offerId } = req.params as { offerId: string };
     try {
       const offer = await this.offerService.findById(offerId);
@@ -106,7 +112,7 @@ export default class OfferController extends Controller {
     }
   }
 
-  private async updateOffer(
+  private async update(
     req: Request<unknown, unknown, UpdateOfferDto>,
     res: Response,
   ) {
@@ -125,7 +131,7 @@ export default class OfferController extends Controller {
     }
   }
 
-  private async deleteOffer(req: Request, res: Response) {
+  private async delete(req: Request, res: Response) {
     const { offerId } = req.params as { offerId: string };
     const result = await this.offerService.deleteById(offerId);
     if (!result) {

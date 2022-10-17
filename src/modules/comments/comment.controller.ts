@@ -11,6 +11,8 @@ import { HttpMethod } from '../../types/router.types.js';
 import { IOfferService } from '../offer/offer.types';
 import HttpError from '../../common/errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
+import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectId.middleware.js';
+import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 
 @injectable()
 export default class CommentController extends Controller {
@@ -24,12 +26,14 @@ export default class CommentController extends Controller {
     this.addRoute({
       path: '/add',
       method: HttpMethod.Post,
-      handler: this.addComment,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateCommentDto)],
     });
     this.addRoute({
       path: '/list/:offerId',
       method: HttpMethod.Get,
       handler: this.getList,
+      middlewares: [new ValidateObjectIdMiddleware('offerId')],
     });
   }
 
@@ -47,7 +51,7 @@ export default class CommentController extends Controller {
     }
   }
 
-  private async addComment(
+  private async create(
     req: Request<unknown, unknown, CreateCommentDto>,
     res: Response,
   ) {

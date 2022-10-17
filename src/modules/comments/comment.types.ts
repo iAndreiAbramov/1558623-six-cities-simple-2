@@ -7,7 +7,7 @@ import CreateCommentDto from './dto/create-comment.dto.js';
 export interface IComment {
   text: string;
   rating: number;
-  author: Ref<UserEntity>;
+  authorId: Ref<UserEntity>;
   offerId: Ref<OfferEntity>;
 }
 

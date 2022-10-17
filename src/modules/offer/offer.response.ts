@@ -13,7 +13,7 @@ export default class OfferResponse {
   @Expose({ groups: [ResponseGroup.OfferDetails] })
   description!: string;
 
-  @Expose()
+  @Expose({ name: 'cityId' })
   @Type(() => CityResponse)
   city!: CityResponse;
 
@@ -41,7 +41,7 @@ export default class OfferResponse {
   @Expose({ groups: [ResponseGroup.OfferDetails] })
   goods!: string[];
 
-  @Expose({ groups: [ResponseGroup.OfferDetails] })
+  @Expose({ name: 'hostId', groups: [ResponseGroup.OfferDetails] })
   @Type(() => UserResponse)
   host!: UserResponse;
 

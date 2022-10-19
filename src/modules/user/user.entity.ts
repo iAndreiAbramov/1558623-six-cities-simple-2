@@ -40,7 +40,6 @@ export class UserEntity extends defaultClasses.TimeStamps implements IUser {
   })
   email!: string;
 
-  // TODO: добавить дефолтную аватарку
   @prop({
     required: false,
     default: 'fake.jpg',

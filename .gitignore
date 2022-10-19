@@ -6,10 +6,10 @@
 /docs/
 .idea/*
 /mongodb/
+/src/mocks/mocks.tsv
+/upload/
 
 .DS_Store
 coverage
 *.log
 *.env
-
-/src/mocks/mocks.tsv

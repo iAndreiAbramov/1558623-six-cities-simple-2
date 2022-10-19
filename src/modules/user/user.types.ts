@@ -1,8 +1,9 @@
 import { DocumentType } from '@typegoose/typegoose';
 import CreateUserDto from './dto/create-user.dto';
 import { UserEntity } from './user.entity.js';
+import { IDocumentExists } from '../../types/document-exists.interface';
 
-export interface IUserService {
+export interface IUserService extends IDocumentExists {
   create: (
     dto: CreateUserDto,
     salt: string,

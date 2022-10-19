@@ -64,4 +64,9 @@ export default class OfferService implements IOfferService {
       .populate('cityId')
       .limit(offersNumber || DEFAULT_OFFERS_NUMBER);
   }
+
+  async exists(documentId: string): Promise<boolean> {
+    const existingEntity = await this.offerModel.findById(documentId);
+    return !!existingEntity;
+  }
 }

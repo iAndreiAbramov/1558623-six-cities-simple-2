@@ -27,7 +27,10 @@ export default class CommentController extends Controller {
       path: '/add',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateCommentDto)],
+      middlewares: [
+        new ValidateDtoMiddleware(CreateCommentDto),
+        new ValidateObjectIdMiddleware('authorId'),
+      ],
     });
     this.addRoute({
       path: '/list/:offerId',

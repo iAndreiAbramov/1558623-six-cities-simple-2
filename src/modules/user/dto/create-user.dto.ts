@@ -1,9 +1,9 @@
 import {
   IsBoolean,
   IsDefined,
+  IsEmail,
   IsString,
   Length,
-  Matches,
 } from 'class-validator';
 
 export default class CreateUserDto {
@@ -16,10 +16,7 @@ export default class CreateUserDto {
   name!: string;
 
   @IsDefined({ message: '$property should be defined' })
-  @IsString({ message: '$property should be a string' })
-  @Matches(/^([\w-\\.]+@([\w-]+\.)+[\w-]{2,4})?$/, {
-    message: '$property should be a valid email',
-  })
+  @IsEmail({ message: '$property should be a valid email' })
   email!: string;
 
   @IsString({ message: '$property should be a string' })

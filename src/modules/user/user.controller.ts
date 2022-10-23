@@ -92,7 +92,7 @@ export default class UserController extends Controller {
     const token = await createJWT({
       algorithm: 'HS256',
       jwtSecret: this.configService.get('JWT_SECRET'),
-      payload: { email: existingUser.email, id: existingUser.id },
+      payload: { email: existingUser.email, userId: existingUser.id },
     });
 
     this.sendOk(

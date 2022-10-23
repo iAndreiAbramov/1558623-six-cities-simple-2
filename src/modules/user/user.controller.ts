@@ -89,7 +89,6 @@ export default class UserController extends Controller {
   }
 
   async uploadAvatar(req: Request, res: Response) {
-    this.logger.info('Saving file');
     this.sendCreated(res, {
       filepath: req.file?.path,
     });

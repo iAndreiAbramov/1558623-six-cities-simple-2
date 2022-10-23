@@ -9,10 +9,10 @@ import { fillDTO } from '../../utils/common.utils.js';
 import CommentResponse from './comment.response.js';
 import { HttpMethod } from '../../types/router.types.js';
 import { IOfferService } from '../offer/offer.types';
-import HttpError from '../../common/errors/http-error.js';
-import { StatusCodes } from 'http-status-codes';
 import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectId.middleware.js';
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
+import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
+import { IUserService } from '../user/user.types';
 
 @injectable()
 export default class CommentController extends Controller {
@@ -20,6 +20,7 @@ export default class CommentController extends Controller {
     @inject(Component.ILoggerService) logger: ILoggerService,
     @inject(Component.ICommentService) private commentService: ICommentService,
     @inject(Component.IOfferService) private offerService: IOfferService,
+    @inject(Component.IUserService) private userService: IUserService,
   ) {
     super(logger);
     this.logger.info('Registering routes for CommentController');
@@ -27,28 +28,41 @@ export default class CommentController extends Controller {
       path: '/add',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateCommentDto)],
+      middlewares: [
+        new ValidateDtoMiddleware(CreateCommentDto),
+        new ValidateObjectIdMiddleware('offerId'),
+        new ValidateObjectIdMiddleware('authorId'),
+        new DocumentExistsMiddleware({
+          service: this.offerService,
+          paramName: 'offerId',
+          entityName: 'offer',
+        }),
+        new DocumentExistsMiddleware({
+          service: this.userService,
+          paramName: 'authorId',
+          entityName: 'user',
+        }),
+      ],
     });
     this.addRoute({
       path: '/list/:offerId',
       method: HttpMethod.Get,
       handler: this.getList,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')],
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware({
+          service: this.offerService,
+          paramName: 'offerId',
+          entityName: 'offer',
+        }),
+      ],
     });
   }
 
   private async getList(req: Request, res: Response) {
     const { offerId } = req.params as { offerId: string };
-    try {
-      const comments = await this.commentService.getList(offerId);
-      this.sendOk(res, fillDTO(CommentResponse, comments));
-    } catch {
-      throw new HttpError({
-        httpCode: StatusCodes.NOT_FOUND,
-        message: `Offer with id ${offerId} does not exist`,
-        detail: 'CommentController',
-      });
-    }
+    const comments = await this.commentService.getList(offerId);
+    this.sendOk(res, fillDTO(CommentResponse, comments));
   }
 
   private async create(
@@ -56,24 +70,16 @@ export default class CommentController extends Controller {
     res: Response,
   ) {
     const existingOffer = await this.offerService.findById(req.body.offerId);
-    if (!existingOffer) {
-      throw new HttpError({
-        httpCode: StatusCodes.NOT_FOUND,
-        message: `Offer with id ${req.body.offerId} does not exist`,
-        detail: 'CommentController',
-      });
-    }
-
     const comment = await this.commentService.create(req.body);
     const newRating = await this.commentService
-      .getList(existingOffer.id)
+      .getList(existingOffer?.id)
       .then((comments) =>
         comments.length > 0
           ? comments.reduce((acc, cur) => acc + cur.rating, 0) / comments.length
           : 0,
       );
     await this.offerService.updateCommentsCountAndRating(
-      existingOffer.id,
+      existingOffer?.id,
       newRating,
     );
     this.sendCreated(res, fillDTO(CommentResponse, comment));

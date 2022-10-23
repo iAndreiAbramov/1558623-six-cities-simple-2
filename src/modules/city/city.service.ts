@@ -34,4 +34,9 @@ export default class CityService implements ICityService {
     const existingCity = await this.findByName(dto.name);
     return existingCity ? existingCity : this.create(dto);
   }
+
+  async exists(documentId: string): Promise<boolean> {
+    const existingEntity = await this.cityModel.findById(documentId);
+    return !!existingEntity;
+  }
 }

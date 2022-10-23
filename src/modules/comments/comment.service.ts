@@ -30,9 +30,14 @@ export default class CommentService implements ICommentService {
       .limit(DEFAULT_COMMENTS_NUMBER);
   }
 
-  public async deleteByOfferId(offerId: string): Promise<number> {
+  async deleteByOfferId(offerId: string): Promise<number> {
     const result = await this.commentModel.deleteMany({ offerId });
 
     return result.deletedCount;
+  }
+
+  async exists(documentId: string): Promise<boolean> {
+    const existingEntity = await this.commentModel.findById(documentId);
+    return !!existingEntity;
   }
 }

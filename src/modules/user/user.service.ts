@@ -43,4 +43,9 @@ export default class UserService implements IUserService {
     const existingUser = await this.userModel.findOne({ email: dto.email });
     return existingUser ? existingUser : this.create(dto, salt);
   }
+
+  async exists(documentId: string): Promise<boolean> {
+    const existingEntity = await this.userModel.findById(documentId);
+    return !!existingEntity;
+  }
 }

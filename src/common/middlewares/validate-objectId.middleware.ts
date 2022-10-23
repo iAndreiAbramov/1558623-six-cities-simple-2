@@ -9,8 +9,13 @@ const { Types } = mongoose;
 export default class ValidateObjectIdMiddleware implements IMiddleware {
   constructor(private param: string) {}
 
-  execute(req: Request, _res: Response, next: NextFunction) {
-    const objectId = req.params[this.param];
+  execute(
+    { body, query, params }: Request,
+    _res: Response,
+    next: NextFunction,
+  ) {
+    const objectId =
+      params[this.param] || query[this.param] || body[this.param];
 
     if (Types?.ObjectId.isValid(objectId)) {
       return next();

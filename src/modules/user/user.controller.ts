@@ -5,7 +5,7 @@ import { ILoggerService } from '../../common/logger/logger.types';
 import { HttpMethod } from '../../types/router.types.js';
 import { IUserService } from './user.types';
 import CreateUserDto from './dto/create-user.dto.js';
-import { IConfigService } from '../../common/app-config/config-service.types';
+import { IConfigService } from '../../common/config-service/config-service.types';
 import { Request, Response } from 'express';
 import HttpError from '../../common/errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
@@ -13,6 +13,8 @@ import { fillDTO } from '../../utils/common.utils.js';
 import UserResponse from './user.response.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
+import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectId.middleware.js';
+import { UploadFileMiddleware } from '../../common/middlewares/upload-file.middleware.js';
 
 @injectable()
 export default class UserController extends Controller {
@@ -35,6 +37,18 @@ export default class UserController extends Controller {
       method: HttpMethod.Post,
       handler: this.login,
       middlewares: [new ValidateDtoMiddleware(LoginUserDto)],
+    });
+    this.addRoute({
+      path: '/:userId/avatar',
+      method: HttpMethod.Post,
+      handler: this.uploadAvatar,
+      middlewares: [
+        new ValidateObjectIdMiddleware('userId'),
+        new UploadFileMiddleware(
+          this.configService.get('UPLOAD_DIRECTORY'),
+          'avatar',
+        ),
+      ],
     });
   }
 
@@ -71,6 +85,13 @@ export default class UserController extends Controller {
       httpCode: StatusCodes.NOT_IMPLEMENTED,
       message: 'Not implemented',
       detail: 'UserController',
+    });
+  }
+
+  async uploadAvatar(req: Request, res: Response) {
+    this.logger.info('Saving file');
+    this.sendCreated(res, {
+      filepath: req.file?.path,
     });
   }
 }

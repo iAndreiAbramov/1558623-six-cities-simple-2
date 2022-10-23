@@ -7,6 +7,7 @@ import CreateOfferDto from './dto/create-offer.dto';
 import { OfferEntity } from './offer.entity';
 import UpdateOfferDto from './dto/update-offer.dto';
 import { CityName } from '../../types/cities.types';
+import { IDocumentExists } from '../../types/document-exists.interface';
 
 export interface IOfferCreate {
   title: string;
@@ -27,7 +28,7 @@ export interface IOfferCreate {
   commentCount: number;
 }
 
-export interface IOfferService {
+export interface IOfferService extends IDocumentExists {
   create: (dto: CreateOfferDto) => Promise<DocumentType<OfferEntity> | null>;
   update: (dto: UpdateOfferDto) => Promise<DocumentType<OfferEntity> | null>;
   findById: (id: string) => Promise<DocumentType<OfferEntity> | null>;

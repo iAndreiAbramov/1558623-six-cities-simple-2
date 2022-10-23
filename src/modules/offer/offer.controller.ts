@@ -42,7 +42,10 @@ export default class OfferController extends Controller {
       path: '/update',
       method: HttpMethod.Patch,
       handler: this.update,
-      middlewares: [new ValidateDtoMiddleware(UpdateOfferDto)],
+      middlewares: [
+        new ValidateDtoMiddleware(UpdateOfferDto),
+        new ValidateObjectIdMiddleware('offerId'),
+      ],
     });
     this.addRoute({
       path: '/details/:offerId',

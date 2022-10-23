@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { ILoggerService } from '../common/logger/logger.types.js';
-import { IConfigService } from '../common/app-config/config-service.types';
+import { IConfigService } from '../common/config-service/config-service.types';
 import { Component } from '../types/component.types.js';
 import { IDbClient } from '../common/db-client/db-client.types';
 import { getDbConnectionURI } from '../utils/db.utils.js';
@@ -14,7 +14,7 @@ export default class Application {
 
   constructor(
     @inject(Component.ILoggerService) private logger: ILoggerService,
-    @inject(Component.IConfigService) private appConfig: IConfigService,
+    @inject(Component.IConfigService) private configService: IConfigService,
     @inject(Component.IDbClient) private dbClient: IDbClient,
     @inject(Component.OfferController) private offerController: IController,
     @inject(Component.UserController) private userController: IController,
@@ -27,6 +27,10 @@ export default class Application {
 
   private initMiddlewares() {
     this.app.use(express.json());
+    this.app.use(
+      '/upload',
+      express.static(this.configService.get('UPLOAD_DIRECTORY')),
+    );
   }
 
   private initRoutes() {
@@ -43,11 +47,11 @@ export default class Application {
     this.logger.info('Application initialization...');
     await this.dbClient.connect(
       getDbConnectionURI({
-        dbUser: this.appConfig.get('DB_USER'),
-        dbPassword: this.appConfig.get('DB_PASSWORD'),
-        dbHost: this.appConfig.get('DB_HOST'),
-        dbPort: this.appConfig.get('DB_PORT'),
-        dbName: this.appConfig.get('DB_NAME'),
+        dbUser: this.configService.get('DB_USER'),
+        dbPassword: this.configService.get('DB_PASSWORD'),
+        dbHost: this.configService.get('DB_HOST'),
+        dbPort: this.configService.get('DB_PORT'),
+        dbName: this.configService.get('DB_NAME'),
       }),
     );
 
@@ -55,7 +59,7 @@ export default class Application {
     this.initRoutes();
     this.initExceptionFilters();
 
-    const port = this.appConfig.get('PORT');
+    const port = this.configService.get('PORT');
     this.app.listen(port);
     this.logger.info(`Server started on port: ${port}`);
   }

@@ -1,6 +1,6 @@
 import convict from 'convict';
 import validator from 'convict-format-with-validator';
-import { TConfigSchema } from './config-service.types';
+import {TConfigSchema} from './config-service.types';
 
 convict.addFormats(validator);
 
@@ -46,5 +46,11 @@ export const configServiceSchema = convict<TConfigSchema>({
     format: String,
     env: 'DB_NAME',
     default: 'six-cities-db',
+  },
+  UPLOAD_DIRECTORY: {
+    doc: 'Directory for uploading files',
+    format: String,
+    env: 'UPLOAD_DIRECTORY',
+    default: null,
   }
 });

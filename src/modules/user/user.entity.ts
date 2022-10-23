@@ -5,7 +5,7 @@ import typegoose, {
 import { IUser } from '../../types/user.types.js';
 import { createSHA256 } from '../../utils/common.utils.js';
 
-const { prop, modelOptions, } = typegoose;
+const { prop, modelOptions } = typegoose;
 
 export interface UserEntity extends defaultClasses.Base {}
 
@@ -63,6 +63,11 @@ export class UserEntity extends defaultClasses.TimeStamps implements IUser {
 
   getPassword() {
     return this.password;
+  }
+
+  verifyPassword(password: string, salt: string) {
+    const hashPassword = createSHA256(password, salt);
+    return hashPassword === this.password;
   }
 }
 

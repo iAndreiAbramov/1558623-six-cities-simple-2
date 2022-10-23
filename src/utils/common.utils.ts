@@ -6,6 +6,8 @@ import dayjs from 'dayjs';
 import * as crypto from 'crypto';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { ResponseGroup } from '../types/ResponseGroup.js';
+import * as jose from 'jose';
+import {TJoseAlgorithm} from '../types/jose-algorithms.types';
 
 export const getRandomInteger = (min: number, max: number): number => {
   let startValue = Math.ceil(Math.min(min, max));
@@ -75,3 +77,18 @@ export const fillDTO = <T, V>(
 export const createErrorObject = (message: string) => ({
   error: message,
 });
+
+export const createJWT = ({
+  algorithm,
+  jwtSecret,
+  payload,
+}: {
+  algorithm: TJoseAlgorithm;
+  jwtSecret: string;
+  payload: object;
+}) =>
+  new jose.SignJWT({ ...payload })
+    .setProtectedHeader({ alg: algorithm })
+    .setIssuedAt()
+    .setExpirationTime('2d')
+    .sign(crypto.createSecretKey(jwtSecret, 'utf-8'));

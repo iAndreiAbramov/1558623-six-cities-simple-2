@@ -9,12 +9,13 @@ import { IConfigService } from '../../common/config-service/config-service.types
 import { Request, Response } from 'express';
 import HttpError from '../../common/errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
-import { fillDTO } from '../../utils/common.utils.js';
+import { createJWT, fillDTO } from '../../utils/common.utils.js';
 import UserResponse from './user.response.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectId.middleware.js';
 import { UploadFileMiddleware } from '../../common/middlewares/upload-file.middleware.js';
+import LoggedUserResponse from './logged-user.response.js';
 
 @injectable()
 export default class UserController extends Controller {
@@ -54,7 +55,7 @@ export default class UserController extends Controller {
 
   private async create(
     req: Request<unknown, unknown, CreateUserDto>,
-    res: Response,
+    res: Response<UserResponse>,
   ) {
     const existingUser = await this.userService.findByEmail(req.body.email);
     if (existingUser) {
@@ -72,20 +73,32 @@ export default class UserController extends Controller {
     this.sendCreated(res, fillDTO(UserResponse, newUser));
   }
 
-  private async login(req: Request<unknown, unknown, LoginUserDto>) {
-    const existingUser = await this.userService.findByEmail(req.body.email);
+  private async login(
+    req: Request<unknown, unknown, LoginUserDto>,
+    res: Response<LoggedUserResponse>,
+  ) {
+    const existingUser = await this.userService.verifyUser(
+      req.body,
+      this.configService.get('SALT'),
+    );
     if (!existingUser) {
       throw new HttpError({
         httpCode: StatusCodes.UNAUTHORIZED,
-        message: `User with email ${req.body.email} not found`,
+        message: 'Unauthorized',
+        detail: 'UserController',
       });
     }
 
-    throw new HttpError({
-      httpCode: StatusCodes.NOT_IMPLEMENTED,
-      message: 'Not implemented',
-      detail: 'UserController',
+    const token = await createJWT({
+      algorithm: 'HS256',
+      jwtSecret: this.configService.get('JWT_SECRET'),
+      payload: { email: existingUser.email, id: existingUser.id },
     });
+
+    this.sendOk(
+      res,
+      fillDTO(LoggedUserResponse, { email: existingUser.email, token }),
+    );
   }
 
   async uploadAvatar(req: Request, res: Response) {

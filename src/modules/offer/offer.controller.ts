@@ -94,6 +94,7 @@ export default class OfferController extends Controller {
 
     const newOffer = await this.offerService.create({
       ...req.body,
+      hostId: req.body.userId,
       cityId: existingCity.id,
     });
     if (!newOffer) {

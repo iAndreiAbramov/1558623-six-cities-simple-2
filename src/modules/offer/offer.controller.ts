@@ -15,6 +15,7 @@ import HttpError from '../../common/errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
 import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectId.middleware.js';
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
+import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -36,13 +37,17 @@ export default class OfferController extends Controller {
       path: '/create',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)],
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateOfferDto),
+      ],
     });
     this.addRoute({
       path: '/update',
       method: HttpMethod.Patch,
       handler: this.update,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(UpdateOfferDto),
         new ValidateObjectIdMiddleware('offerId'),
       ],
@@ -57,7 +62,10 @@ export default class OfferController extends Controller {
       path: '/delete/:offerId',
       method: HttpMethod.Delete,
       handler: this.delete,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')],
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+      ],
     });
   }
 

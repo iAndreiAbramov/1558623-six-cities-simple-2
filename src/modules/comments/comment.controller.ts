@@ -13,6 +13,7 @@ import ValidateObjectIdMiddleware from '../../common/middlewares/validate-object
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
 import { IUserService } from '../user/user.types';
+import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
 
 @injectable()
 export default class CommentController extends Controller {
@@ -29,6 +30,7 @@ export default class CommentController extends Controller {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(CreateCommentDto),
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateObjectIdMiddleware('userId'),

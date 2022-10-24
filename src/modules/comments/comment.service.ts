@@ -27,6 +27,7 @@ export default class CommentService implements ICommentService {
     return this.commentModel
       .find({ offerId })
       .populate('userId')
+      .sort({ createdAt: 'desc' })
       .limit(DEFAULT_COMMENTS_NUMBER);
   }
 

@@ -16,6 +16,8 @@ import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middlew
 import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectId.middleware.js';
 import { UploadFileMiddleware } from '../../common/middlewares/upload-file.middleware.js';
 import LoggedUserResponse from './logged-user.response.js';
+import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
+import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
 
 @injectable()
 export default class UserController extends Controller {
@@ -49,7 +51,13 @@ export default class UserController extends Controller {
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('userId'),
+        new DocumentExistsMiddleware({
+          service: this.userService,
+          paramName: 'userId',
+          entityName: 'user',
+        }),
         new UploadFileMiddleware(
           this.configService.get('UPLOAD_DIRECTORY'),
           'avatar',
@@ -123,8 +131,18 @@ export default class UserController extends Controller {
   }
 
   async uploadAvatar(req: Request, res: Response) {
-    this.sendCreated(res, {
-      filepath: req.file?.path,
-    });
+    const { userId } = req.params as { userId: string };
+    const { avatar } = req.body as { avatar: string };
+    const updatedUser = await this.userService.updateAvatar(userId, avatar);
+    if (!updatedUser) {
+      throw new HttpError({
+        httpCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Failed to update user avatar',
+        detail: 'UserController',
+      });
+    }
+
+    this.logger.info(`User with id ${userId} avatar updated ${avatar}`);
+    this.sendCreated(res, fillDTO(UserResponse, updatedUser));
   }
 }

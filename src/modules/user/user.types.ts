@@ -14,6 +14,8 @@ export interface IUserService extends IDocumentExists {
 
   findById: (id: string) => Promise<DocumentType<UserEntity> | null>;
 
+  updateAvatar(id: string, avatar: string): Promise<UserEntity | null>
+
   findOrCreate: (
     dto: CreateUserDto,
     salt: string,

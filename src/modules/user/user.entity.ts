@@ -4,6 +4,7 @@ import typegoose, {
 } from '@typegoose/typegoose';
 import { IUser } from '../../types/user.types.js';
 import { createSHA256 } from '../../utils/common.utils.js';
+import { DEFAULT_AVATAR } from '../../constants/common.constants.js';
 
 const { prop, modelOptions } = typegoose;
 
@@ -42,10 +43,10 @@ export class UserEntity extends defaultClasses.TimeStamps implements IUser {
 
   @prop({
     required: false,
-    default: 'fake.jpg',
+    default: DEFAULT_AVATAR,
     match: [/\.jpg|\.png$/, 'Image format must be .jpg or .png'],
   })
-  avatar!: string;
+  avatar?: string;
 
   @prop({
     required: true,
@@ -59,10 +60,6 @@ export class UserEntity extends defaultClasses.TimeStamps implements IUser {
 
   setPassword(password: string, salt: string) {
     this.password = createSHA256(password, salt);
-  }
-
-  getPassword() {
-    return this.password;
   }
 
   verifyPassword(password: string, salt: string) {

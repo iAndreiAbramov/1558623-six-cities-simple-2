@@ -20,7 +20,7 @@ export default class CreateUserDto {
   email!: string;
 
   @IsString({ message: '$property should be a string' })
-  avatar!: string;
+  avatar?: string;
 
   @IsDefined({ message: '$property should be defined' })
   @IsString({ message: '$property should be a string' })

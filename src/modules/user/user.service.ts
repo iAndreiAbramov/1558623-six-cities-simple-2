@@ -41,6 +41,14 @@ export default class UserService implements IUserService {
     return this.userModel.findById(id);
   }
 
+  async updateAvatar(id: string, avatar: string): Promise<UserEntity | null> {
+    return await this.userModel.findByIdAndUpdate(
+      id,
+      { avatar },
+      { new: true },
+    );
+  }
+
   async findOrCreate(
     dto: CreateUserDto,
     salt: string,

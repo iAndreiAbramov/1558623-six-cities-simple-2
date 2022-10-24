@@ -21,6 +21,7 @@ export class UploadFileMiddleware implements IMiddleware {
       ) => {
         const extension = mime.extension(file.mimetype);
         const fileNameWithoutExtension = nanoid();
+        req.body.avatar = `${this.directory}/${fileNameWithoutExtension}.${extension}`;
         callback(null, `${fileNameWithoutExtension}.${extension}`);
       },
     });

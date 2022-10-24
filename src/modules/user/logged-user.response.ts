@@ -5,5 +5,14 @@ export default class LoggedUserResponse {
   token!: string;
 
   @Expose()
+  name!: string;
+
+  @Expose()
   email!: string;
+
+  @Expose()
+  avatar!: string;
+
+  @Expose()
+  isPro!: boolean;
 }

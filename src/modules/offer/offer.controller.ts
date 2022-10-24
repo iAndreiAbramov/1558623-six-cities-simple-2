@@ -4,10 +4,11 @@ import { ILoggerService } from '../../common/logger/logger.types';
 import { Component } from '../../types/component.types.js';
 import { HttpMethod } from '../../types/router.types.js';
 import { Request, Response } from 'express';
-import { IOfferService } from './offer.types';
 import UpdateOfferDto from './dto/update-offer.dto.js';
 import CreateOfferDto from './dto/create-offer.dto.js';
+import { IOfferService } from './offer.types';
 import { ICityService } from '../city/city.types';
+import { ICommentService } from '../comments/comment.types';
 import { fillDTO } from '../../utils/common.utils.js';
 import OfferResponse from './offer.response.js';
 import { ResponseGroup } from '../../types/ResponseGroup.js';
@@ -16,7 +17,7 @@ import { StatusCodes } from 'http-status-codes';
 import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectId.middleware.js';
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
-import { ICommentService } from '../comments/comment.types';
+import CheckOwnerMiddleware from '../../common/middlewares/check-owner.middleware.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -52,6 +53,10 @@ export default class OfferController extends Controller {
         new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(UpdateOfferDto),
         new ValidateObjectIdMiddleware('offerId'),
+        new CheckOwnerMiddleware({
+          service: this.offerService,
+          paramName: 'offerId',
+        }),
       ],
     });
     this.addRoute({
@@ -67,6 +72,10 @@ export default class OfferController extends Controller {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
+        new CheckOwnerMiddleware({
+          service: this.offerService,
+          paramName: 'offerId',
+        }),
       ],
     });
   }
@@ -103,6 +112,7 @@ export default class OfferController extends Controller {
       throw new Error('Failed to create offer');
     }
 
+    this.logger.info(`Offer with id ${newOffer.id} created`);
     this.sendCreated(
       res,
       fillDTO(OfferResponse, newOffer, [ResponseGroup.OfferDetails]),
@@ -132,6 +142,7 @@ export default class OfferController extends Controller {
   ) {
     try {
       const offer = await this.offerService.update(req.body);
+      this.logger.info(`Offer with id ${req.body.offerId} updated`);
       this.sendOk(
         res,
         fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),

@@ -8,6 +8,7 @@ import { OfferEntity } from './offer.entity';
 import UpdateOfferDto from './dto/update-offer.dto';
 import { CityName } from '../../types/cities.types';
 import { IDocumentExists } from '../../types/document-exists.interface';
+import {IGetOwnerId} from '../../types/get-owner-id.interface';
 
 export interface IOfferCreate {
   title: string;
@@ -28,7 +29,7 @@ export interface IOfferCreate {
   commentCount: number;
 }
 
-export interface IOfferService extends IDocumentExists {
+export interface IOfferService extends IDocumentExists, IGetOwnerId {
   create: (dto: CreateOfferDto) => Promise<DocumentType<OfferEntity> | null>;
   update: (dto: UpdateOfferDto) => Promise<DocumentType<OfferEntity> | null>;
   findById: (id: string) => Promise<DocumentType<OfferEntity> | null>;
@@ -38,4 +39,5 @@ export interface IOfferService extends IDocumentExists {
     offerId: string,
     rating: number,
   ) => Promise<DocumentType<OfferEntity> | null>;
+  getOwnerId(documentId: string): Promise<string | void | Buffer | undefined> ;
 }

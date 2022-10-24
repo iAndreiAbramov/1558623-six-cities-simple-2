@@ -16,6 +16,7 @@ import { StatusCodes } from 'http-status-codes';
 import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectId.middleware.js';
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
+import { ICommentService } from '../comments/comment.types';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -23,6 +24,7 @@ export default class OfferController extends Controller {
     @inject(Component.ILoggerService) logger: ILoggerService,
     @inject(Component.IOfferService) private offerService: IOfferService,
     @inject(Component.ICityService) private cityService: ICityService,
+    @inject(Component.ICommentService) private commentService: ICommentService,
   ) {
     super(logger);
 
@@ -152,6 +154,14 @@ export default class OfferController extends Controller {
         message: `Offer with id '${offerId}' does not exist`,
         detail: 'OfferController',
       });
+    }
+    const deletedCommentsCount = await this.commentService.deleteByOfferId(
+      offerId,
+    );
+    if (deletedCommentsCount) {
+      this.logger.info(
+        `Offer with id ${offerId} and ${deletedCommentsCount} comments deleted`,
+      );
     }
     this.sendNoContent(res, result);
   }

@@ -40,6 +40,11 @@ export default class UserController extends Controller {
       middlewares: [new ValidateDtoMiddleware(LoginUserDto)],
     });
     this.addRoute({
+      path: '/check',
+      method: HttpMethod.Post,
+      handler: this.checkAuthentication,
+    });
+    this.addRoute({
       path: '/:userId/avatar',
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
@@ -99,6 +104,22 @@ export default class UserController extends Controller {
       res,
       fillDTO(LoggedUserResponse, { email: existingUser.email, token }),
     );
+  }
+
+  private async checkAuthentication(
+    req: Request,
+    res: Response,
+  ): Promise<void> {
+    const existingUser = await this.userService.findById(req.body.userId);
+    if (!existingUser) {
+      throw new HttpError({
+        httpCode: StatusCodes.UNAUTHORIZED,
+        message: 'Unauthorized',
+        detail: 'UserController',
+      });
+    }
+
+    return this.sendOk(res, fillDTO(LoggedUserResponse, existingUser));
   }
 
   async uploadAvatar(req: Request, res: Response) {

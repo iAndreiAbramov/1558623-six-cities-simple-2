@@ -12,6 +12,8 @@ export interface IUserService extends IDocumentExists {
 
   findByEmail: (email: string) => Promise<DocumentType<UserEntity> | null>;
 
+  findById: (id: string) => Promise<DocumentType<UserEntity> | null>;
+
   findOrCreate: (
     dto: CreateUserDto,
     salt: string,

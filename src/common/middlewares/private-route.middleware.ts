@@ -10,11 +10,13 @@ export default class PrivateRouteMiddleware implements IMiddleware {
     next: NextFunction,
   ): void | Promise<void> {
     if (!req.body.userId) {
-      throw new HttpError({
-        httpCode: StatusCodes.UNAUTHORIZED,
-        message: 'Unauthorized',
-        detail: 'PrivateRouteMiddleware',
-      });
+      return next(
+        new HttpError({
+          httpCode: StatusCodes.UNAUTHORIZED,
+          message: 'Unauthorized',
+          detail: 'PrivateRouteMiddleware',
+        }),
+      );
     }
 
     return next();

@@ -1,6 +1,6 @@
 import convict from 'convict';
 import validator from 'convict-format-with-validator';
-import {TConfigSchema} from './config-service.types';
+import { TConfigSchema } from './config-service.types';
 
 convict.addFormats(validator);
 
@@ -52,5 +52,11 @@ export const configServiceSchema = convict<TConfigSchema>({
     format: String,
     env: 'UPLOAD_DIRECTORY',
     default: null,
-  }
+  },
+  JWT_SECRET: {
+    doc: 'Secret key for JWT token',
+    format: String,
+    env: 'JWT_SECRET',
+    default: null,
+  },
 });

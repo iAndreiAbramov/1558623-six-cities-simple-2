@@ -8,7 +8,6 @@ import {
   IsBoolean,
   IsDefined,
   IsEnum,
-  IsMongoId,
   IsNumber,
   IsString,
   Length,
@@ -114,11 +113,11 @@ export default class CreateOfferDto {
   @ArrayMaxSize(2, {
     message: '$property should be an array of $constraint1 elements',
   })
-  @IsNumber()
   coordinates?: number[];
 
-  @IsMongoId({ message: '$property should be a valid mongo Id' })
   hostId!: string;
+
+  userId!: string;
 
   cityId?: string;
 }

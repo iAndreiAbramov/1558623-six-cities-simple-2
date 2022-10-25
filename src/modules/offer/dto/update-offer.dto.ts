@@ -115,4 +115,6 @@ export default class UpdateOfferDto {
   hostId!: string;
 
   cityId?: string;
+
+  userId!: string;
 }

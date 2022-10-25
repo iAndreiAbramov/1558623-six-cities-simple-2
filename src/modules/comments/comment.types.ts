@@ -8,7 +8,7 @@ import {IDocumentExists} from '../../types/document-exists.interface';
 export interface IComment {
   text: string;
   rating: number;
-  authorId: Ref<UserEntity>;
+  userId: Ref<UserEntity>;
   offerId: Ref<OfferEntity>;
 }
 

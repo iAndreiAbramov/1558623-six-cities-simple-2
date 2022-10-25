@@ -18,7 +18,7 @@ export default class CommentService implements ICommentService {
 
   async create(dto: CreateCommentDto): Promise<DocumentType<CommentEntity>> {
     let newComment = await this.commentModel.create(dto);
-    newComment = await newComment.populate('authorId');
+    newComment = await newComment.populate('userId');
     this.logger.info('New comment created');
     return newComment;
   }
@@ -26,7 +26,8 @@ export default class CommentService implements ICommentService {
   async getList(offerId: string): Promise<DocumentType<CommentEntity>[]> {
     return this.commentModel
       .find({ offerId })
-      .populate('authorId')
+      .populate('userId')
+      .sort({ createdAt: 'desc' })
       .limit(DEFAULT_COMMENTS_NUMBER);
   }
 

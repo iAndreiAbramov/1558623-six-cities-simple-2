@@ -5,6 +5,7 @@ import CreateUserDto from './dto/create-user.dto.js';
 import { UserEntity } from './user.entity.js';
 import { ILoggerService } from '../../common/logger/logger.types.js';
 import { Component } from '../../types/component.types.js';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @injectable()
 export default class UserService implements IUserService {
@@ -36,6 +37,18 @@ export default class UserService implements IUserService {
     return this.userModel.findOne({ email });
   }
 
+  async findById(id: string): Promise<DocumentType<UserEntity> | null> {
+    return this.userModel.findById(id);
+  }
+
+  async updateAvatar(id: string, avatar: string): Promise<UserEntity | null> {
+    return await this.userModel.findByIdAndUpdate(
+      id,
+      { avatar },
+      { new: true },
+    );
+  }
+
   async findOrCreate(
     dto: CreateUserDto,
     salt: string,
@@ -47,5 +60,19 @@ export default class UserService implements IUserService {
   async exists(documentId: string): Promise<boolean> {
     const existingEntity = await this.userModel.findById(documentId);
     return !!existingEntity;
+  }
+
+  async verifyUser(dto: LoginUserDto, salt: string) {
+    const existingUser = await this.findByEmail(dto.email);
+
+    if (!existingUser) {
+      return null;
+    }
+
+    if (existingUser.verifyPassword(dto.password, salt)) {
+      return existingUser;
+    }
+
+    return null;
   }
 }

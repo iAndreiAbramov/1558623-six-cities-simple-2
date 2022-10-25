@@ -13,10 +13,6 @@ export default class CreateCommentDto {
   offerId!: string;
 
   @IsDefined({ message: '$property should be defined' })
-  @IsMongoId({ message: '$property should be a valid mongo Id' })
-  authorId!: string;
-
-  @IsDefined({ message: '$property should be defined' })
   @Length(5, 1024, {
     message:
       '$property length should be from $constraint1 to constraint2 characters',
@@ -32,4 +28,6 @@ export default class CreateCommentDto {
     message: '$property max value should be $constraint1',
   })
   rating!: number;
+
+  userId!: string;
 }

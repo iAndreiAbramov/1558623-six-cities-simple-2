@@ -13,6 +13,7 @@ import ValidateObjectIdMiddleware from '../../common/middlewares/validate-object
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
 import { IUserService } from '../user/user.types';
+import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
 
 @injectable()
 export default class CommentController extends Controller {
@@ -29,9 +30,10 @@ export default class CommentController extends Controller {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(CreateCommentDto),
         new ValidateObjectIdMiddleware('offerId'),
-        new ValidateObjectIdMiddleware('authorId'),
+        new ValidateObjectIdMiddleware('userId'),
         new DocumentExistsMiddleware({
           service: this.offerService,
           paramName: 'offerId',
@@ -39,7 +41,7 @@ export default class CommentController extends Controller {
         }),
         new DocumentExistsMiddleware({
           service: this.userService,
-          paramName: 'authorId',
+          paramName: 'userId',
           entityName: 'user',
         }),
       ],
@@ -67,10 +69,13 @@ export default class CommentController extends Controller {
 
   private async create(
     req: Request<unknown, unknown, CreateCommentDto>,
-    res: Response,
+    res: Response<CommentResponse>,
   ) {
     const existingOffer = await this.offerService.findById(req.body.offerId);
-    const comment = await this.commentService.create(req.body);
+    const comment = await this.commentService.create({
+      ...req.body,
+      userId: req.body.userId,
+    });
     const newRating = await this.commentService
       .getList(existingOffer?.id)
       .then((comments) =>

@@ -4,10 +4,11 @@ import { ILoggerService } from '../../common/logger/logger.types';
 import { Component } from '../../types/component.types.js';
 import { HttpMethod } from '../../types/router.types.js';
 import { Request, Response } from 'express';
-import { IOfferService } from './offer.types';
 import UpdateOfferDto from './dto/update-offer.dto.js';
 import CreateOfferDto from './dto/create-offer.dto.js';
+import { IOfferService } from './offer.types';
 import { ICityService } from '../city/city.types';
+import { ICommentService } from '../comments/comment.types';
 import { fillDTO } from '../../utils/common.utils.js';
 import OfferResponse from './offer.response.js';
 import { ResponseGroup } from '../../types/ResponseGroup.js';
@@ -15,6 +16,8 @@ import HttpError from '../../common/errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
 import ValidateObjectIdMiddleware from '../../common/middlewares/validate-objectId.middleware.js';
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
+import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
+import CheckOwnerMiddleware from '../../common/middlewares/check-owner.middleware.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -22,6 +25,7 @@ export default class OfferController extends Controller {
     @inject(Component.ILoggerService) logger: ILoggerService,
     @inject(Component.IOfferService) private offerService: IOfferService,
     @inject(Component.ICityService) private cityService: ICityService,
+    @inject(Component.ICommentService) private commentService: ICommentService,
   ) {
     super(logger);
 
@@ -36,15 +40,23 @@ export default class OfferController extends Controller {
       path: '/create',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)],
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateOfferDto),
+      ],
     });
     this.addRoute({
       path: '/update',
       method: HttpMethod.Patch,
       handler: this.update,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(UpdateOfferDto),
         new ValidateObjectIdMiddleware('offerId'),
+        new CheckOwnerMiddleware({
+          service: this.offerService,
+          paramName: 'offerId',
+        }),
       ],
     });
     this.addRoute({
@@ -57,7 +69,14 @@ export default class OfferController extends Controller {
       path: '/delete/:offerId',
       method: HttpMethod.Delete,
       handler: this.delete,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')],
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new CheckOwnerMiddleware({
+          service: this.offerService,
+          paramName: 'offerId',
+        }),
+      ],
     });
   }
 
@@ -86,12 +105,14 @@ export default class OfferController extends Controller {
 
     const newOffer = await this.offerService.create({
       ...req.body,
+      hostId: req.body.userId,
       cityId: existingCity.id,
     });
     if (!newOffer) {
       throw new Error('Failed to create offer');
     }
 
+    this.logger.info(`Offer with id ${newOffer.id} created`);
     this.sendCreated(
       res,
       fillDTO(OfferResponse, newOffer, [ResponseGroup.OfferDetails]),
@@ -121,6 +142,7 @@ export default class OfferController extends Controller {
   ) {
     try {
       const offer = await this.offerService.update(req.body);
+      this.logger.info(`Offer with id ${req.body.offerId} updated`);
       this.sendOk(
         res,
         fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
@@ -143,6 +165,14 @@ export default class OfferController extends Controller {
         message: `Offer with id '${offerId}' does not exist`,
         detail: 'OfferController',
       });
+    }
+    const deletedCommentsCount = await this.commentService.deleteByOfferId(
+      offerId,
+    );
+    if (deletedCommentsCount) {
+      this.logger.info(
+        `Offer with id ${offerId} and ${deletedCommentsCount} comments deleted`,
+      );
     }
     this.sendNoContent(res, result);
   }

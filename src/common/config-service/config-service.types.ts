@@ -7,6 +7,7 @@ export type TConfigSchema = {
   DB_PORT: string;
   DB_NAME: string;
   UPLOAD_DIRECTORY: string;
+  JWT_SECRET: string;
 };
 
 export interface IConfigService {

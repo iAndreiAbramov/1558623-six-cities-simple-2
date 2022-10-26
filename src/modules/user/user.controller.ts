@@ -18,6 +18,7 @@ import { UploadFileMiddleware } from '../../common/middlewares/upload-file.middl
 import LoggedUserResponse from './logged-user.response.js';
 import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
 import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
+import { DEFAULT_AVATAR } from '../../constants/common.constants.js';
 
 @injectable()
 export default class UserController extends Controller {
@@ -77,6 +78,10 @@ export default class UserController extends Controller {
         message: `User with email ${req.body.email} already exists`,
         detail: 'UserController',
       });
+    }
+
+    if (!req.body.avatar) {
+      req.body.avatar = DEFAULT_AVATAR;
     }
 
     const newUser = await this.userService.create(

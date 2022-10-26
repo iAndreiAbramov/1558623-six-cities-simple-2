@@ -43,10 +43,10 @@ export class UserEntity extends defaultClasses.TimeStamps implements IUser {
 
   @prop({
     required: false,
+    type: String,
     default: DEFAULT_AVATAR,
-    match: [/\.jpg|\.png$/, 'Image format must be .jpg or .png'],
   })
-  avatar?: string;
+  avatar!: string;
 
   @prop({
     required: true,

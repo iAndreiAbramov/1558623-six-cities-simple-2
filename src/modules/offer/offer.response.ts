@@ -41,7 +41,7 @@ export default class OfferResponse {
   @Expose({ groups: [ResponseGroup.OfferDetails] })
   goods!: string[];
 
-  @Expose({ name: 'hostId', groups: [ResponseGroup.OfferDetails] })
+  @Expose({ name: 'userId', groups: [ResponseGroup.OfferDetails] })
   @Type(() => UserResponse)
   host!: UserResponse;
 

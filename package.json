@@ -19,7 +19,7 @@
     "mock:server": "json-server ./src/mocks/mock-server-data.json --port 3123",
     "cli": "./dist/cli.js",
     "generate": "npm run cli -- --generate 100 src/mocks/mocks.tsv http://localhost:3123/api",
-    "import": "npm run cli -- --import src/mocks/mocks.tsv admin 123321 127.0.0.1 27017 six-cities-db test-salt"
+    "import": "npm run cli -- --import src/mocks/mocks.tsv"
   },
   "devDependencies": {
     "@types/convict": "^6.1.1",

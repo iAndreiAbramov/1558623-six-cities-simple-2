@@ -17,6 +17,8 @@ import { CityModel } from '../modules/city/city.entity.js';
 import OfferService from '../modules/offer/offer.service.js';
 import { OfferModel } from '../modules/offer/offer.entity.js';
 import DbClientService from '../common/db-client/db-client.service.js';
+import { IConfigService } from '../common/config-service/config-service.types';
+import ConfigService from '../common/config-service/config.service.js';
 
 const DEFAULT_USER_PASSWORD = '123456';
 
@@ -27,6 +29,7 @@ class ImportCommand implements ICLICommand {
   private readonly cityService: ICityService;
   private readonly offerService: IOfferService;
   private readonly databaseService: IDbClient;
+  private readonly configService: IConfigService;
   private salt!: string;
 
   constructor() {
@@ -38,6 +41,7 @@ class ImportCommand implements ICLICommand {
     this.databaseService = new DbClientService(this.loggerService);
     this.cityService = new CityService(this.loggerService, CityModel);
     this.offerService = new OfferService(this.loggerService, OfferModel);
+    this.configService = new ConfigService(this.loggerService);
   }
 
   private async saveOffer(offer: IOfferParsed): Promise<void> {
@@ -70,23 +74,20 @@ class ImportCommand implements ICLICommand {
     await this.databaseService.disconnect();
   };
 
-  async execute(
-    filename: string,
-    dbUser: string,
-    dbPassword: string,
-    dbHost: string,
-    dbPort: string,
-    dbName: string,
-    salt: string,
-  ): Promise<void> {
+  async execute(filename: string): Promise<void> {
+    this.loggerService.warn(
+      'FKJHGASDLKJHASD',
+      this.configService.get('DB_USER'),
+      this.configService.get('DB_PASSWORD'),
+    );
     const uri = getDbConnectionURI({
-      dbUser,
-      dbPassword,
-      dbHost,
-      dbPort,
-      dbName,
+      dbUser: this.configService.get('DB_USER'),
+      dbPassword: this.configService.get('DB_PASSWORD'),
+      dbHost: this.configService.get('DB_HOST'),
+      dbPort: this.configService.get('DB_PORT'),
+      dbName: this.configService.get('DB_NAME'),
     });
-    this.salt = salt;
+    this.salt = this.configService.get('SALT');
 
     await this.databaseService.connect(uri);
 

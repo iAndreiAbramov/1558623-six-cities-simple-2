@@ -5,11 +5,17 @@ import {
   IsString,
   Length,
 } from 'class-validator';
+import {
+  MAX_PASSWORD_LENGTH,
+  MAX_USER_NAME_LENGTH,
+  MIN_PASSWORD_LENGTH,
+  MIN_USER_NAME_LENGTH,
+} from '../../../constants/common.constants.js';
 
 export default class CreateUserDto {
   @IsDefined({ message: '$property should be defined' })
   @IsString({ message: '$property should be a string' })
-  @Length(1, 15, {
+  @Length(MIN_USER_NAME_LENGTH, MAX_USER_NAME_LENGTH, {
     message:
       '$property length should be from $constraint1 to $constraint2 characters',
   })
@@ -24,7 +30,7 @@ export default class CreateUserDto {
 
   @IsDefined({ message: '$property should be defined' })
   @IsString({ message: '$property should be a string' })
-  @Length(6, 12, {
+  @Length(MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, {
     message:
       '$property length should be from $constraint1 to $constraint2 characters',
   })

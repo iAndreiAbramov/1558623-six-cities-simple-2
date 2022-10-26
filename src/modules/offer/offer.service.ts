@@ -72,6 +72,6 @@ export default class OfferService implements IOfferService {
 
   async getOwnerId(documentId: string): Promise<string | void | Buffer | undefined> {
     const document = await this.findById(documentId);
-    return document?.hostId?.id ? document.hostId.id : '';
+    return document?.userId?.id ? document.userId.id : '';
   }
 }

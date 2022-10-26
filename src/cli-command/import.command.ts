@@ -55,7 +55,7 @@ class ImportCommand implements ICLICommand {
       ...offer,
       cityId: city.id,
       cityName: city.name,
-      hostId: user.id,
+      userId: user.id,
     });
   }
 

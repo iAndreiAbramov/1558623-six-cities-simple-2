@@ -17,17 +17,22 @@ import {
 import { CityName } from '../../../types/cities.types.js';
 import {
   MAX_GUESTS,
+  MAX_OFFER_DESCRIPTION_LENGTH,
+  MAX_OFFER_TITLE_LENGTH,
   MAX_PRICE,
   MAX_ROOMS_NUMBER,
   MIN_GUESTS,
+  MIN_OFFER_DESCRIPTION_LENGTH,
+  MIN_OFFER_TITLE_LENGTH,
   MIN_PRICE,
   MIN_ROOMS_NUMBER,
+  PHOTOS_NUMBER_IN_OFFER,
 } from '../../../constants/common.constants.js';
 
 export default class CreateOfferDto {
   @IsDefined({ message: '$property should be defined' })
   @IsString({ message: '$property should be a string' })
-  @Length(10, 100, {
+  @Length(MIN_OFFER_TITLE_LENGTH, MAX_OFFER_TITLE_LENGTH, {
     message:
       '$property length should be from $constraint1 to $constraint2 characters',
   })
@@ -35,7 +40,7 @@ export default class CreateOfferDto {
 
   @IsDefined({ message: '$property should be defined' })
   @IsString({ message: '$property should be a string' })
-  @Length(20, 1024, {
+  @Length(MIN_OFFER_DESCRIPTION_LENGTH, MAX_OFFER_DESCRIPTION_LENGTH, {
     message:
       '$property length should be from $constraint1 to constraint2 characters',
   })
@@ -51,10 +56,10 @@ export default class CreateOfferDto {
 
   @IsArray()
   @IsDefined({ message: '$property should be defined' })
-  @ArrayMinSize(6, {
+  @ArrayMinSize(PHOTOS_NUMBER_IN_OFFER, {
     message: '$property should be an array of $constraint1 elements',
   })
-  @ArrayMaxSize(6, {
+  @ArrayMaxSize(PHOTOS_NUMBER_IN_OFFER, {
     message: '$property should be an array of $constraint1 elements',
   })
   @IsString({ message: '$property should be a string', each: true })
@@ -114,8 +119,6 @@ export default class CreateOfferDto {
     message: '$property should be an array of $constraint1 elements',
   })
   coordinates?: number[];
-
-  hostId!: string;
 
   userId!: string;
 

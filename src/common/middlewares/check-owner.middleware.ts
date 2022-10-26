@@ -26,18 +26,18 @@ export default class CheckOwnerMiddleware implements IMiddleware {
   ): Promise<void> {
     const ownerId = body.userId;
     const entityId =
-      body[this.paramName] ||
-      query[this.paramName] ||
-      params[this.paramName];
+      body[this.paramName] || query[this.paramName] || params[this.paramName];
     const receivedOwnerId = await this.service.getOwnerId(entityId);
     if (receivedOwnerId !== ownerId) {
-      throw new HttpError({
-        httpCode: StatusCodes.FORBIDDEN,
-        message: 'Access denied, this is not yours',
-        detail: 'CheckOwnerMiddleware',
-      });
+      return next(
+        new HttpError({
+          httpCode: StatusCodes.FORBIDDEN,
+          message: 'Access denied, this is not yours',
+          detail: 'CheckOwnerMiddleware',
+        }),
+      );
     }
 
-    next();
+    return next();
   }
 }

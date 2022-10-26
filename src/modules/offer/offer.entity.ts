@@ -57,7 +57,7 @@ export class OfferEntity
   goods!: Good[];
 
   @prop({ required: true, ref: UserEntity, _id: false })
-  hostId!: Ref<UserEntity>;
+  userId!: Ref<UserEntity>;
 
   @prop({ required: true, enum: CityName })
   cityName!: CityName;

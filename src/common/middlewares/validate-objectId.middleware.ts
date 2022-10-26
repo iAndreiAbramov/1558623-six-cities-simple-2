@@ -21,10 +21,12 @@ export default class ValidateObjectIdMiddleware implements IMiddleware {
       return next();
     }
 
-    throw new HttpError({
-      httpCode: StatusCodes.BAD_REQUEST,
-      message: `${objectId} is invalid objectId`,
-      detail: 'ValidateObjectIdMiddleware',
-    });
+    return next(
+      new HttpError({
+        httpCode: StatusCodes.BAD_REQUEST,
+        message: `${objectId} is invalid objectId`,
+        detail: 'ValidateObjectIdMiddleware',
+      }),
+    );
   }
 }

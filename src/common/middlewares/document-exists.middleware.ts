@@ -32,13 +32,15 @@ export default class DocumentExistsMiddleware implements IMiddleware {
       params[this.paramName] || body[this.paramName] || query[this.paramName];
 
     if (!(await this.service.exists(documentId))) {
-      throw new HttpError({
-        httpCode: StatusCodes.BAD_REQUEST,
-        message: `${this.entityName} with id ${documentId} not found`,
-        detail: 'DocumentExistsMiddleware',
-      });
+      return next(
+        new HttpError({
+          httpCode: StatusCodes.BAD_REQUEST,
+          message: `${this.entityName} with id ${documentId} not found`,
+          detail: 'DocumentExistsMiddleware',
+        }),
+      );
     }
 
-    next();
+    return next();
   }
 }

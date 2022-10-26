@@ -22,7 +22,7 @@ export interface IOfferCreate {
   guestsNumber: number;
   price: number;
   goods: Good[];
-  hostId: Ref<UserEntity>;
+  userId: Ref<UserEntity>;
   cityName: CityName;
   coordinates?: number[];
   rating?: number;

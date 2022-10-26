@@ -1,3 +1,5 @@
+#!/home/andrey/.nvm/versions/node/v16.16.0/bin/node
+
 import { ICLICommand } from '../types/command.types';
 
 type TParsedCommand = {

@@ -109,7 +109,10 @@ export default class OfferController extends Controller {
       });
     }
 
-    return this.sendOk(res, fillDTO(OfferResponse, offersList));
+    return this.sendOk(
+      res,
+      fillDTO(OfferResponse, offersList, [ResponseGroup.OfferBasic]),
+    );
   }
 
   private async create(
@@ -137,7 +140,10 @@ export default class OfferController extends Controller {
     this.logger.info(`Offer with id ${newOffer.id} created`);
     this.sendCreated(
       res,
-      fillDTO(OfferResponse, newOffer, [ResponseGroup.OfferDetails]),
+      fillDTO(OfferResponse, newOffer, [
+        ResponseGroup.OfferDetails,
+        ResponseGroup.OfferBasic,
+      ]),
     );
   }
 
@@ -146,7 +152,10 @@ export default class OfferController extends Controller {
     const offer = await this.offerService.findById(offerId);
     this.sendOk(
       res,
-      fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
+      fillDTO(OfferResponse, offer, [
+        ResponseGroup.OfferDetails,
+        ResponseGroup.OfferBasic,
+      ]),
     );
   }
 
@@ -158,7 +167,10 @@ export default class OfferController extends Controller {
     this.logger.info(`Offer with id ${req.body.offerId} updated`);
     this.sendOk(
       res,
-      fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
+      fillDTO(OfferResponse, offer, [
+        ResponseGroup.OfferDetails,
+        ResponseGroup.OfferBasic,
+      ]),
     );
   }
 

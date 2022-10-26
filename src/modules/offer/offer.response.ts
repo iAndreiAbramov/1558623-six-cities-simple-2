@@ -4,10 +4,10 @@ import UserResponse from '../user/user.response.js';
 import { ResponseGroup } from '../../types/ResponseGroup.js';
 
 export default class OfferResponse {
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferBasic] })
   id!: string;
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferBasic] })
   title!: string;
 
   @Expose({ groups: [ResponseGroup.OfferDetails] })
@@ -17,16 +17,16 @@ export default class OfferResponse {
   @Type(() => CityResponse)
   city!: CityResponse;
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferBasic] })
   previewImage!: string;
 
   @Expose({ groups: [ResponseGroup.OfferDetails] })
   photos!: string[];
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferBasic] })
   isPremium!: boolean;
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferBasic] })
   type!: string;
 
   @Expose({ groups: [ResponseGroup.OfferDetails] })
@@ -35,25 +35,25 @@ export default class OfferResponse {
   @Expose({ groups: [ResponseGroup.OfferDetails] })
   guestsNumber!: number;
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferBasic] })
   price!: number;
 
   @Expose({ groups: [ResponseGroup.OfferDetails] })
   goods!: string[];
 
-  @Expose({ name: 'userId', groups: [ResponseGroup.OfferDetails] })
+  @Expose({ groups: [ResponseGroup.OfferDetails], name: 'userId' })
   @Type(() => UserResponse)
   host!: UserResponse;
 
   @Expose({ groups: [ResponseGroup.OfferDetails] })
   coordinates!: string[];
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferBasic] })
   createdAt!: string;
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferBasic] })
   commentCount!: number;
 
-  @Expose()
+  @Expose({ groups: [ResponseGroup.OfferBasic] })
   rating!: number;
 }

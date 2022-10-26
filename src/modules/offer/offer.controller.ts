@@ -10,7 +10,7 @@ import { IOfferService } from './offer.types';
 import { ICityService } from '../city/city.types';
 import { ICommentService } from '../comments/comment.types';
 import { fillDTO } from '../../utils/common.utils.js';
-import OfferResponse from './offer.response.js';
+import OfferDetailedResponse from './response/offer-detailed.response.js';
 import { ResponseGroup } from '../../types/ResponseGroup.js';
 import HttpError from '../../common/errors/http-error.js';
 import { StatusCodes } from 'http-status-codes';
@@ -19,6 +19,7 @@ import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middlew
 import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
 import CheckOwnerMiddleware from '../../common/middlewares/check-owner.middleware.js';
 import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
+import OfferBasicResponse from './response/offer-raw.response.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -111,7 +112,7 @@ export default class OfferController extends Controller {
 
     return this.sendOk(
       res,
-      fillDTO(OfferResponse, offersList, [ResponseGroup.OfferBasic]),
+      fillDTO(OfferBasicResponse, offersList, [ResponseGroup.OfferBasic]),
     );
   }
 
@@ -140,7 +141,7 @@ export default class OfferController extends Controller {
     this.logger.info(`Offer with id ${newOffer.id} created`);
     this.sendCreated(
       res,
-      fillDTO(OfferResponse, newOffer, [
+      fillDTO(OfferDetailedResponse, newOffer, [
         ResponseGroup.OfferDetails,
         ResponseGroup.OfferBasic,
       ]),
@@ -152,7 +153,7 @@ export default class OfferController extends Controller {
     const offer = await this.offerService.findById(offerId);
     this.sendOk(
       res,
-      fillDTO(OfferResponse, offer, [
+      fillDTO(OfferDetailedResponse, offer, [
         ResponseGroup.OfferDetails,
         ResponseGroup.OfferBasic,
       ]),
@@ -167,7 +168,7 @@ export default class OfferController extends Controller {
     this.logger.info(`Offer with id ${req.body.offerId} updated`);
     this.sendOk(
       res,
-      fillDTO(OfferResponse, offer, [
+      fillDTO(OfferDetailedResponse, offer, [
         ResponseGroup.OfferDetails,
         ResponseGroup.OfferBasic,
       ]),

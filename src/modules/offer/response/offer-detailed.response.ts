@@ -1,9 +1,9 @@
 import { Expose, Type } from 'class-transformer';
-import CityResponse from '../city/city.response.js';
-import UserResponse from '../user/user.response.js';
-import { ResponseGroup } from '../../types/ResponseGroup.js';
+import CityResponse from '../../city/city.response.js';
+import UserResponse from '../../user/user.response.js';
+import { ResponseGroup } from '../../../types/ResponseGroup.js';
 
-export default class OfferResponse {
+export default class OfferDetailedResponse {
   @Expose({ groups: [ResponseGroup.OfferBasic] })
   id!: string;
 

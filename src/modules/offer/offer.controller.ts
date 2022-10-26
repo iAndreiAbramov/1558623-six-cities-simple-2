@@ -18,6 +18,7 @@ import ValidateObjectIdMiddleware from '../../common/middlewares/validate-object
 import ValidateDtoMiddleware from '../../common/middlewares/validate-dto.middleware.js';
 import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
 import CheckOwnerMiddleware from '../../common/middlewares/check-owner.middleware.js';
+import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
 
 @injectable()
 export default class OfferController extends Controller {
@@ -53,6 +54,11 @@ export default class OfferController extends Controller {
         new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(UpdateOfferDto),
         new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware({
+          service: this.offerService,
+          paramName: 'offerId',
+          entityName: 'offer',
+        }),
         new CheckOwnerMiddleware({
           service: this.offerService,
           paramName: 'offerId',
@@ -63,7 +69,14 @@ export default class OfferController extends Controller {
       path: '/details/:offerId',
       method: HttpMethod.Get,
       handler: this.getDetails,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')],
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware({
+          service: this.offerService,
+          paramName: 'offerId',
+          entityName: 'offer',
+        }),
+      ],
     });
     this.addRoute({
       path: '/delete/:offerId',
@@ -72,6 +85,11 @@ export default class OfferController extends Controller {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware({
+          service: this.offerService,
+          paramName: 'offerId',
+          entityName: 'offer',
+        }),
         new CheckOwnerMiddleware({
           service: this.offerService,
           paramName: 'offerId',
@@ -84,7 +102,11 @@ export default class OfferController extends Controller {
     const { offersNumber } = req.query as { offersNumber: string };
     const offersList = await this.offerService.getList(Number(offersNumber));
     if (!offersList) {
-      throw new Error('Failed to get offers');
+      throw new HttpError({
+        httpCode: StatusCodes.INTERNAL_SERVER_ERROR,
+        message: 'Failed to get offers',
+        detail: 'OfferController',
+      });
     }
 
     return this.sendOk(res, fillDTO(OfferResponse, offersList));
@@ -121,59 +143,36 @@ export default class OfferController extends Controller {
 
   private async getDetails(req: Request, res: Response) {
     const { offerId } = req.params as { offerId: string };
-    try {
-      const offer = await this.offerService.findById(offerId);
-      this.sendOk(
-        res,
-        fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
-      );
-    } catch (error) {
-      throw new HttpError({
-        httpCode: StatusCodes.NOT_FOUND,
-        message: `Offer with id '${offerId}' does not exist`,
-        detail: 'OfferController',
-      });
-    }
+    const offer = await this.offerService.findById(offerId);
+    this.sendOk(
+      res,
+      fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
+    );
   }
 
   private async update(
     req: Request<unknown, unknown, UpdateOfferDto>,
     res: Response,
   ) {
-    try {
-      const offer = await this.offerService.update(req.body);
-      this.logger.info(`Offer with id ${req.body.offerId} updated`);
-      this.sendOk(
-        res,
-        fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
-      );
-    } catch {
-      throw new HttpError({
-        httpCode: StatusCodes.NOT_FOUND,
-        message: `Offer with id '${req.body.offerId}' does not exist`,
-        detail: 'OfferController',
-      });
-    }
+    const offer = await this.offerService.update(req.body);
+    this.logger.info(`Offer with id ${req.body.offerId} updated`);
+    this.sendOk(
+      res,
+      fillDTO(OfferResponse, offer, [ResponseGroup.OfferDetails]),
+    );
   }
 
   private async delete(req: Request, res: Response) {
     const { offerId } = req.params as { offerId: string };
-    const result = await this.offerService.deleteById(offerId);
-    if (!result) {
-      throw new HttpError({
-        httpCode: StatusCodes.NOT_FOUND,
-        message: `Offer with id '${offerId}' does not exist`,
-        detail: 'OfferController',
-      });
-    }
+    await this.offerService.deleteById(offerId);
     const deletedCommentsCount = await this.commentService.deleteByOfferId(
       offerId,
     );
-    if (deletedCommentsCount) {
-      this.logger.info(
-        `Offer with id ${offerId} and ${deletedCommentsCount} comments deleted`,
-      );
-    }
-    this.sendNoContent(res, result);
+    this.logger.info(
+      `Offer with id ${offerId} and ${
+        deletedCommentsCount || 0
+      } comments deleted`,
+    );
+    this.sendNoContent(res);
   }
 }

@@ -46,7 +46,7 @@ export default abstract class Controller implements IController {
     this.send(res, StatusCodes.CREATED, data);
   }
 
-  public sendNoContent<T>(res: Response, data: T) {
+  public sendNoContent<T>(res: Response, data?: T) {
     this.send(res, StatusCodes.NO_CONTENT, data);
   }
 }

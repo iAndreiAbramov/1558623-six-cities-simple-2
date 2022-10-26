@@ -42,7 +42,7 @@ export default class CreateOfferDto {
   @IsString({ message: '$property should be a string' })
   @Length(MIN_OFFER_DESCRIPTION_LENGTH, MAX_OFFER_DESCRIPTION_LENGTH, {
     message:
-      '$property length should be from $constraint1 to constraint2 characters',
+      '$property length should be from $constraint1 to $constraint2 characters',
   })
   description!: string;
 

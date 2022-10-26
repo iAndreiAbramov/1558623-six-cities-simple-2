@@ -62,6 +62,7 @@ export default class OfferService implements IOfferService {
     return this.offerModel
       .find()
       .populate('cityId')
+      .sort({ createdAt: 'desc' })
       .limit(offersNumber || DEFAULT_OFFERS_NUMBER);
   }
 

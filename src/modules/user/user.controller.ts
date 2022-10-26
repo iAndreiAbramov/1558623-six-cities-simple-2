@@ -19,6 +19,8 @@ import LoggedUserResponse from './logged-user.response.js';
 import PrivateRouteMiddleware from '../../common/middlewares/private-route.middleware.js';
 import DocumentExistsMiddleware from '../../common/middlewares/document-exists.middleware.js';
 import { DEFAULT_AVATAR } from '../../constants/common.constants.js';
+import PublicRouteMiddleware from '../../common/middlewares/public-route.middleware.js';
+import { AuthenticateMiddleware } from '../../common/middlewares/authenticate.middleware.js';
 
 @injectable()
 export default class UserController extends Controller {
@@ -34,7 +36,11 @@ export default class UserController extends Controller {
       path: '/create',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateUserDto)],
+      middlewares: [
+        new AuthenticateMiddleware(this.configService.get('JWT_SECRET')),
+        new PublicRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateUserDto),
+      ],
     });
     this.addRoute({
       path: '/login',

@@ -244,6 +244,23 @@ paths:
         401:
           $ref: '#/components/responses/UnAuthorized'
 
+  /user/:userId/avatar:
+    post:
+      tags:
+        - user
+      summary: Загрузка аватара пользователя
+      responses:
+        200:
+          description: Аватар загружен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userGet"
+        400:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/UnAuthorized'
+
 components:
   responses:
     NotFound:
@@ -358,9 +375,6 @@ components:
     userGet:
       type: object
       properties:
-        id:
-          type: string
-          example: "633834d7ce3a94d52ba2dcee"
         name:
           type: string
           example: "host 1"

@@ -1,0 +1,40 @@
+#Create new user
+POST http://localhost:4000/user/create HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "NewUser_fake11",
+  "email": "fake_11@fake.com",
+  "password": "NewPassword1",
+  "isPro": false
+}
+###
+
+#Login user
+POST http://localhost:4000/user/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "fake_11@fake.com",
+  "password": "NewPassword1"
+}
+###
+
+#Check user
+POST http://localhost:4000/user/check HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZha2VfMTFAZmFrZS5jb20iLCJ1c2VySWQiOiI2MzVhYzMxMGU5MGQ1YzEyZjhhMGJjZTgiLCJpYXQiOjE2NjY4OTI2MjEsImV4cCI6MTY2NzA2NTQyMX0.rsLGUYSMFjlBC-Oj6hYNQ6gKboWb5un1Rw0Q5X2bViY
+###
+
+#Upload user avatar
+POST http://localhost:4000/user/635ac310e90d5c12f8a0bce8/avatar HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZha2VfMTFAZmFrZS5jb20iLCJ1c2VySWQiOiI2MzVhYzMxMGU5MGQ1YzEyZjhhMGJjZTgiLCJpYXQiOjE2NjY4OTI2MjEsImV4cCI6MTY2NzA2NTQyMX0.rsLGUYSMFjlBC-Oj6hYNQ6gKboWb5un1Rw0Q5X2bViY
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="avatar"; filename="keks.jpg"
+Content-Type: image/jpeg
+
+< /home/andrey/Documents/study/academy/1558623-six-cities-simple-2/markup/img/keks.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+###

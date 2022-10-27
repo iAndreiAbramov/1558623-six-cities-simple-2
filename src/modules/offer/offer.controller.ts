@@ -48,7 +48,7 @@ export default class OfferController extends Controller {
       ],
     });
     this.addRoute({
-      path: '/update',
+      path: '/update/:offerId',
       method: HttpMethod.Patch,
       handler: this.update,
       middlewares: [
@@ -164,8 +164,9 @@ export default class OfferController extends Controller {
     req: Request<unknown, unknown, UpdateOfferDto>,
     res: Response,
   ) {
-    const offer = await this.offerService.update(req.body);
-    this.logger.info(`Offer with id ${req.body.offerId} updated`);
+    const { offerId } = req.params as { offerId: string };
+    const offer = await this.offerService.update(offerId, req.body);
+    this.logger.info(`Offer with id ${offerId} updated`);
     this.sendOk(
       res,
       fillDTO(OfferDetailedResponse, offer, [

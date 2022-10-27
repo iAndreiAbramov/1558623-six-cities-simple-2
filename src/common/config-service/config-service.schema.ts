@@ -9,7 +9,7 @@ export const configServiceSchema = convict<TConfigSchema>({
     doc: 'Port for incoming connection',
     format: 'port',
     env: 'PORT',
-    default: 4444,
+    default: 4000,
   },
   SALT: {
     doc: 'Salt for password hash',

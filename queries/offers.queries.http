@@ -1,0 +1,70 @@
+#Get offers list
+GET http://localhost:4000/offers?offersNumber=5 HTTP/1.1
+Accept: application/json
+
+###
+
+#Get offer by ID
+GET http://localhost:4000/offers/details/63590893472572efcb718fb1 HTTP/1.1
+Accept: application/json
+
+###
+
+#Create offer
+POST http://localhost:4000/offers/create HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZha2VfMTFAZmFrZS5jb20iLCJ1c2VySWQiOiI2MzVhYzMxMGU5MGQ1YzEyZjhhMGJjZTgiLCJpYXQiOjE2NjY4OTI2MjEsImV4cCI6MTY2NzA2NTQyMX0.rsLGUYSMFjlBC-Oj6hYNQ6gKboWb5un1Rw0Q5X2bViY
+
+{
+    "title": "Loft Studio in the Central Area",
+    "description": "Discover daily local life in city center, friendly neighborhood, clandestine casino, karaoke, old-style artisans, art gallery and artist studio downstairs.",
+    "previewImage": "preview/image-0",
+    "photos": [
+        "photo-21",
+        "photo-22",
+        "photo-23",
+        "photo-24",
+        "photo-25",
+        "photo-26"
+    ],
+    "isPremium": true,
+    "type": "house",
+    "roomsNumber": 5,
+    "guestsNumber": 5,
+    "price": 55555,
+    "goods": [
+        "Baby seat",
+        "Breakfast"
+    ],
+    "cityName": "Dusseldorf",
+    "coordinates": [
+        11.99999,
+        1.22222
+    ]
+}
+###
+
+#Update offer
+PATCH http://localhost:4000/offers/update/635ac665e90d5c12f8a0bcee HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZha2VfMTFAZmFrZS5jb20iLCJ1c2VySWQiOiI2MzVhYzMxMGU5MGQ1YzEyZjhhMGJjZTgiLCJpYXQiOjE2NjY4OTI2MjEsImV4cCI6MTY2NzA2NTQyMX0.rsLGUYSMFjlBC-Oj6hYNQ6gKboWb5un1Rw0Q5X2bViY
+
+{
+  "isPremium": true,
+  "type": "house",
+  "roomsNumber": 1,
+  "guestsNumber": 10,
+  "price": 99999,
+  "goods": [
+    "Baby seat",
+    "Breakfast"
+  ],
+  "cityName": "Paris"
+}
+###
+
+#Delete offer
+DELETE http://localhost:4000/offers/delete/635ac665e90d5c12f8a0bcee HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImZha2VfMTFAZmFrZS5jb20iLCJ1c2VySWQiOiI2MzVhYzMxMGU5MGQ1YzEyZjhhMGJjZTgiLCJpYXQiOjE2NjY4OTI2MjEsImV4cCI6MTY2NzA2NTQyMX0.rsLGUYSMFjlBC-Oj6hYNQ6gKboWb5un1Rw0Q5X2bViY
+###

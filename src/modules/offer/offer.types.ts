@@ -31,7 +31,7 @@ export interface IOfferCreate {
 
 export interface IOfferService extends IDocumentExists, IGetOwnerId {
   create: (dto: CreateOfferDto) => Promise<DocumentType<OfferEntity> | null>;
-  update: (dto: UpdateOfferDto) => Promise<DocumentType<OfferEntity> | null>;
+  update: (offerId: string, dto: UpdateOfferDto) => Promise<DocumentType<OfferEntity> | null>;
   findById: (id: string) => Promise<DocumentType<OfferEntity> | null>;
   deleteById: (offerId: string) => Promise<null>;
   getList: (offersNumber?: number) => Promise<DocumentType<OfferEntity>[]>;

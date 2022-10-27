@@ -6,7 +6,6 @@ import {
   ArrayNotEmpty,
   IsArray,
   IsBoolean,
-  IsDefined,
   IsEnum,
   IsMongoId,
   IsNumber,
@@ -26,11 +25,6 @@ import {
 } from '../../../constants/common.constants.js';
 
 export default class UpdateOfferDto {
-  @IsDefined()
-  @IsMongoId()
-  @IsString({ message: '$property should be a string' })
-  offerId!: string;
-
   @IsString({ message: '$property should be a string' })
   @Length(10, 100, {
     message:

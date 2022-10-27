@@ -28,9 +28,9 @@ export default class OfferService implements IOfferService {
     return null;
   }
 
-  async update(dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
+  async update(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
-      .findByIdAndUpdate(dto.offerId, dto, {
+      .findByIdAndUpdate(offerId, dto, {
         new: true,
       })
       .populate(['userId', 'cityId']);
